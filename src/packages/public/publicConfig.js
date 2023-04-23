@@ -155,3 +155,32 @@ export class PublicConfigClass {
     }
   }
 }
+
+// 多选成组类
+export class PublicGroupConfigClass extends PublicConfigClass {
+  // 成组
+  isGroup = true
+  // 名称
+  chartConfig = {
+    key: 'group',
+    chartKey: 'group',
+    conKey: 'group',
+    category: 'group',
+    categoryName: 'group',
+    package: 'group',
+    chartFrame: ChartFrameEnum.COMMON,
+    title: groupTitle,
+    image: ''
+  }
+  // 组成员列表
+  groupList = []
+  // ---- 原有 ---
+  // key
+  key = 'group'
+  // 配置
+  option = {}
+  // 标识
+  id = getUUID()
+  // 基本信息
+  attr = { w: 0, h: 0, x: 0, y: 0, offsetX: 0, offsetY: 0, zIndex: -1 }
+}

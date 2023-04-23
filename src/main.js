@@ -4,6 +4,7 @@ import App from './App.vue'
 import ElementPlus, { ElMessage } from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import naive from 'naive-ui/es/preset'
 // * 路由
 import router from './router/index'
 // * 状态管理
@@ -25,6 +26,8 @@ import { globalCustomComponents } from '@/plugins/globalCustomComponents.js'
 import { globalCustomDirectives } from '@/plugins/globalCustomDirectives.js'
 
 const app = createApp(App)
+
+app.use(naive)
 
 // * window 挂载
 window['$vue'] = app

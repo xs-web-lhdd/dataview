@@ -2,6 +2,11 @@
 
 <script setup>
 import { computed, ref, reactive, toRefs } from "vue";
+import {
+  dragoverHandle,
+  dragHandle,
+  mousedownHandleUnStop,
+} from "../../hooks/useDrag.js";
 // * 引入store
 import { useChartEditStore } from "@/store/modules/chartEditStore/index.js";
 import { useGlobalStore } from "@/store/modules/globalStore/index.js";
@@ -109,7 +114,14 @@ const dragCanvas = (e) => {
 </script>
 
 <template>
-  <div id="go-chart-edit-layout" class="go-sketch-rule">
+  <div
+    id="go-chart-edit-layout"
+    class="go-sketch-rule"
+    @mousedown="mousedownHandleUnStop"
+    @drop="dragHandle"
+    @dragover="dragoverHandle"
+    @dragenter="dragoverHandle"
+  >
     <sketch-rule
       v-if="sketchRuleReDraw"
       :thick="thick"

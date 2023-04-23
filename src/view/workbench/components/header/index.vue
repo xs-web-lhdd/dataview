@@ -1,5 +1,7 @@
 <script setup>
 import { useShowStore } from "@/store/modules/showStore/index.js";
+import { previewHandle } from "./hooks/usePreview";
+
 const store = useShowStore();
 const handleCharts = () => {
   store.changeCharts();
@@ -9,6 +11,9 @@ const handleLayers = () => {
 };
 const handleConfiguration = () => {
   store.changeConfiguration();
+};
+const handlePreview = () => {
+  previewHandle();
 };
 const handleIcon = (icon) => {
   switch (icon) {
@@ -20,6 +25,9 @@ const handleIcon = (icon) => {
       break;
     case "configuration":
       handleConfiguration();
+      break;
+    case "preview":
+      handlePreview();
       break;
   }
 };
@@ -70,7 +78,7 @@ const handleIcon = (icon) => {
       </div>
     </div>
     <div class="header-right">
-      <div class="preview">
+      <div class="preview" @click="handleIcon('preview')">
         <el-icon class="preview-icon"><View /></el-icon>
         <span class="preview-text">预览</span>
       </div>

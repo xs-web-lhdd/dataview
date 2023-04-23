@@ -1,4 +1,5 @@
 <script setup>
+import Dropdown from "@/components/Dropdown/index.vue";
 //  左侧图表部分
 import Charts from "./components/charts/index.vue";
 // 右侧图表配置项部分
@@ -7,6 +8,10 @@ import Configurations from "./components/configurations/index.vue";
 import EditRuler from "./components/editRuler/index.vue";
 // 中间画布部分
 import EditCanvas from "./components/editCanvas/index.vue";
+import { useChartEditStore } from "@/store/modules/chartEditStore/index.js";
+import { useContextMenu } from "./hooks/useContentMenu.js";
+
+const chartEditStore = useChartEditStore();
 const packages = [
   {
     label: "图表",
@@ -75,6 +80,9 @@ const packages = [
 ];
 // import { getPackagesList } from "./hooks/useAside";
 // console.log(getPackagesList);
+// 右键
+const { menuOptions, onClickOutSide, mousePosition, handleMenuSelect } =
+  useContextMenu();
 </script>
 
 <template>
@@ -97,12 +105,21 @@ const packages = [
     </div>
   </div>
   <!-- 右键 -->
-
-  <!-- <div class="main">
-    <div class="left"></div>
-    <div class="center"></div>
-    <div class="right"></div>
-  </div> -->
+  <!-- elememtPlus × -->
+  <!-- naive-ui √ -->
+  <n-dropdown
+    placement="bottom-start"
+    trigger="manual"
+    size="small"
+    :x="mousePosition.x"
+    :y="mousePosition.y"
+    :options="menuOptions"
+    :show="chartEditStore.getRightMenuShow"
+    :on-clickoutside="onClickOutSide"
+    @select="handleMenuSelect"
+  ></n-dropdown>
+  <!-- 自定义 × -->
+  <!-- <Dropdown :x="mousePosition.x" :y="mousePosition.y"></Dropdown> -->
 </template>
 
 <style lang="scss" scoped>

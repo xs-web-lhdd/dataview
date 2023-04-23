@@ -8,3 +8,9 @@ export const chartInitConfig = {
   offsetX: 0,
   offsetY: 0,
 }
+
+// 数据请求间隔
+export const requestInterval = 30
+
+// 数据请求间隔单位
+export const requestIntervalUnit = 'second'

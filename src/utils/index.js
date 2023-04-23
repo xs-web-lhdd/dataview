@@ -1,3 +1,5 @@
 export * from '@/utils/components'
 export * from '@/utils/utils'
 export * from '@/utils/type'
+export * from '@/utils/style'
+export * from '@/utils/router'

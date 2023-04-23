@@ -17,16 +17,15 @@ const chartEditStore = useChartEditStore();
 console.log(chartEditStore.componentList);
 
 // TODO: 测试 store 里面的 componentList 有没有更新
-// watch(
-//   () => chartEditStore.componentList,
-//   () => {
-//     console.log(chartEditStore.componentList);
-//   },
-//   {
-//     deep: true,
-//     immediate: true,
-//   }
-// );
+watch(
+  () => chartEditStore.componentList.length,
+  () => {
+    console.log("componentList 列表是：", chartEditStore.componentList);
+  },
+  {
+    immediate: true,
+  }
+);
 
 const props = defineProps({
   listOptions: {
@@ -37,9 +36,9 @@ const props = defineProps({
 
 // 开始拖拽：
 const dragStartHandle = (e, chart) => {
-  console.log("拖拽开始！");
-  // console.log("e --->>> ", e);
-  // console.log("chart", chart);
+  // TODO: 开始拖拽提示：
+  // console.log("拖拽开始！");
+
   // 动态注册图表组件
   // 将拖动的组件全局安装，安装对应的图表组件和图表配置组件，将组件注册成全局组件
   componentInstall(chart.chartKey, fetchChartComponent(chart));
@@ -52,7 +51,8 @@ const dragStartHandle = (e, chart) => {
 // 结束拖拽：
 const dragendHandle = () => {
   chartEditStore.setEditCanvas("isCreate", false);
-  console.log("拖拽结束！");
+  // TODO: 结束拖拽提示：
+  // console.log("拖拽结束！");
 };
 // 双击：
 const dblclickHandle = async (chart) => {
