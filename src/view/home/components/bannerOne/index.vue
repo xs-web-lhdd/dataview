@@ -1,4 +1,5 @@
 <script setup>
+import router from "@/router/index.js";
 // 图片
 import bannerOne from "@/assets/images/home/banner1.png";
 import bannerTwo from "@/assets/images/home/banner2.png";
@@ -14,6 +15,7 @@ import IconFive from "@/assets/images/home/icon-5.png";
 import IconSix from "@/assets/images/home/icon-6.png";
 // 介绍列表：
 import Introduce from "../introduce/index.vue";
+import { getLocalStorage } from "@/utils";
 
 const banners = [
   {
@@ -81,6 +83,17 @@ const featureList = [
       "原始数据更新，图表随之更新，例行的周报月报，只需更新数据，即可迅速完成报表，工作效率成倍提升。",
   },
 ];
+// 获取用户信息：
+const userInfo = getLocalStorage("GO_SYSTEM");
+const handleUse = () => {
+  if (userInfo) {
+    window["$message"].success("欢迎使用 DataView ！");
+    router.push("/project/welcome");
+  } else {
+    window["$message"].warning("你还没有登陆，请先去登陆！");
+    router.push("/login");
+  }
+};
 </script>
 
 <template>
@@ -91,9 +104,14 @@ const featureList = [
         <img :src="LogoImg" alt="" />
       </div>
       <div class="right">
-        <div class="items">
-          <div class="item">登 陆</div>
-          <div class="item">注 册</div>
+        <div class="items" v-if="!userInfo">
+          <div class="item" @click="router.push('/login')">登 陆</div>
+          <div class="item" @click="router.push('/register')">注 册</div>
+        </div>
+        <div class="items" v-else>
+          <div class="item" @click="router.push('/project/welcome')">
+            进入 DataView 个人中心
+          </div>
         </div>
       </div>
     </div>
@@ -105,7 +123,9 @@ const featureList = [
             <div class="banner-content">
               <h3 class="banner-title">数据可视化展示神器</h3>
               <p class="banner-desc">人人都是数据达人</p>
-              <div class="banner-btn" :class="item.class">免费使用</div>
+              <div class="banner-btn" :class="item.class" @click="handleUse">
+                免费使用
+              </div>
             </div>
             <div class="banner-img">
               <img :src="item.img" alt="" />
@@ -154,9 +174,13 @@ const featureList = [
       .items {
         display: flex;
         .item {
+          cursor: pointer;
           // border-radius: 20px;
           text-align: center;
-          width: 70px;
+          min-width: 70px;
+          width: auto;
+          padding: 0 10px;
+          box-sizing: border-box;
           height: 30px;
           margin: 7px 10px 7px 0;
           background-color: transparent;
@@ -264,6 +288,7 @@ const featureList = [
       background: #fff;
       color: rgba(10, 18, 32, 0.64);
       box-shadow: 0 4px 8px 0 rgba(30, 62, 124, 0.15);
+      cursor: pointer;
     }
     .item1 {
       color: #4f60bf;

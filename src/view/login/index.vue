@@ -1,13 +1,66 @@
 <!-- 登录页 -->
 
 <script setup>
-import FormBanner from "@/assets/images/home/form-banner.png";
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
+import router from "@/router/index.js";
+import { useSystemStore } from "@/store/modules/systemStore/index.js";
+import $Api from "@/api/index.js";
+
+const systemStore = useSystemStore();
 
 const formLogin = reactive({
-  username: "",
-  password: "",
+  username: "admin",
+  password: "admin",
 });
+
+const SystemStoreEnum = {
+  // 用户
+  USER_INFO: "userInfo",
+  // 请求
+  FETCH_INFO: "fetchInfo",
+};
+
+const SystemStoreUserInfoEnum = {
+  USER_TOKEN: "userToken",
+  TOKEN_NAME: "tokenName",
+  USER_ID: "userId",
+  USER_NAME: "userName",
+  NICK_NAME: "nickName",
+};
+
+const handleSubmit = async () => {
+  console.log("开始登陆！！！");
+  try {
+    const { username, password } = formLogin;
+    const data = await $Api.loginApi({
+      username,
+      password,
+    });
+    if (data) {
+      const { tokenValue, tokenName } = data.token;
+      const { nickname, username, id } = data.userinfo;
+
+      // console.log(data);
+
+      // 存储到 pinia
+      systemStore.setItem(SystemStoreEnum.USER_INFO, {
+        [SystemStoreUserInfoEnum.USER_TOKEN]: tokenValue,
+        [SystemStoreUserInfoEnum.TOKEN_NAME]: tokenName,
+        [SystemStoreUserInfoEnum.USER_ID]: id,
+        [SystemStoreUserInfoEnum.USER_NAME]: username,
+        [SystemStoreUserInfoEnum.NICK_NAME]: nickname,
+      });
+    }
+    window["$message"].success({
+      message: "登陆成功！",
+      showClose: true,
+      center: true,
+    });
+    router.push("/");
+  } catch (err) {
+    console.log("登陆error", err);
+  }
+};
 </script>
 
 <template>
@@ -25,11 +78,11 @@ const formLogin = reactive({
             <el-input v-model="formLogin.username" />
           </el-form-item>
           <el-form-item label="密码">
-            <el-input v-model="formLogin.password" />
+            <el-input type="password" v-model="formLogin.password" />
           </el-form-item>
         </el-form>
         <div class="opera">
-          <div class="opera-btn">登陆</div>
+          <div class="opera-btn" @click="handleSubmit">登陆</div>
           <span class="opera-tip"
             >还没有账号？<router-link to="/register"
               >注册一个</router-link
@@ -116,6 +169,7 @@ const formLogin = reactive({
           background: #2e68dc;
           box-shadow: 0 4px 8px 0 rgba(30, 62, 124, 0.15);
           color: #fff;
+          cursor: pointer;
         }
         &-tip {
           display: inline-block;

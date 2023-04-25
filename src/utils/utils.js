@@ -51,6 +51,15 @@ export const setLocalStorage = (k, v) => {
   }
 }
 
+/**
+ * * 清除本地会话数据
+ * @param name
+ */
+export const clearLocalStorage = (name) => {
+  window.localStorage.removeItem(name)
+}
+
+
 
 /**
  * * 存储临时会话数据

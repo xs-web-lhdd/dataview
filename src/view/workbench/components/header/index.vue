@@ -1,8 +1,14 @@
 <script setup>
+import $Api from "@/api/index.js";
 import { useShowStore } from "@/store/modules/showStore/index.js";
 import { previewHandle } from "./hooks/usePreview";
+import { useSync } from "../main/hooks/useSync.js";
+import { useChartEditStore } from "@/store/modules/chartEditStore/index.js";
+import { setTitle } from "@/utils";
 
 const store = useShowStore();
+const chartEditStore = useChartEditStore();
+const { dataSyncUpdate } = useSync();
 const handleCharts = () => {
   store.changeCharts();
 };
@@ -30,6 +36,71 @@ const handleIcon = (icon) => {
       handlePreview();
       break;
   }
+};
+
+import { ref, computed, watchEffect, nextTick } from "vue";
+import { ElMessageBox } from "element-plus";
+import {
+  ArrowDown,
+  Check,
+  CircleCheck,
+  CirclePlus,
+  CirclePlusFilled,
+} from "@element-plus/icons-vue";
+import { fetchRouteParamsLocation } from "@/utils";
+
+const dialogVisible = ref(false);
+
+const inputInstRef = ref(null);
+const focus = ref(false);
+const title = ref(fetchRouteParamsLocation());
+const comTitle = computed(() => {
+  title.value = title.value.replace(/\s/g, "");
+  const newTitle = title.value.length ? title.value : "新项目";
+  setTitle(`工作台-${newTitle}`);
+  chartEditStore.setEditCanvasConfig("projectName", newTitle);
+  return newTitle;
+});
+
+watchEffect(() => {
+  title.value = chartEditStore.getProjectInfo.projectName || "";
+});
+const handleFocus = () => {
+  focus.value = true;
+  nextTick(() => {
+    inputInstRef.value && inputInstRef.value.focus();
+  });
+};
+const handleBlur = async () => {
+  focus.value = false;
+  chartEditStore.setProjectInfo("projectName", title.value || "");
+  const data = await $Api.updateProjectApi({
+    id: fetchRouteParamsLocation(),
+    projectName: title.value,
+  });
+  console.log("data", data);
+  // if (data) {
+  //   dataSyncUpdate();
+  // } else {
+  //   window["$message"].error("改项目名称失败！");
+  // }
+};
+const handleShowDialog = () => {
+  dialogVisible.value = true;
+};
+const handleConfirmDialog = () => {
+  ElMessageBox.confirm("你确定修改信息吗？")
+    .then(() => {
+      // TODO: 发送修改用户信息的 http
+      // done();
+      dialogVisible.value = false;
+      window["$message"].success("修改信息成功！");
+    })
+    .catch(() => {
+      // catch error
+      dialogVisible.value = false;
+      window["$message"].error("修改信息失败！");
+    });
 };
 </script>
 
@@ -74,7 +145,19 @@ const handleIcon = (icon) => {
         <div class="operate-icon">
           <el-icon><Tools /></el-icon>
         </div>
-        <div class="operate-projectname">工作台 - 刘豪的第一个图表</div>
+        <div class="operate-projectname" @click="handleFocus">
+          工作台 -
+          <el-button v-show="!focus"> {{ comTitle }} </el-button>
+          <el-input
+            v-show="focus"
+            v-model="title"
+            placeholder="请输入项目名称"
+            ref="inputInstRef"
+            size="small"
+            @blur="handleBlur"
+          >
+          </el-input>
+        </div>
       </div>
     </div>
     <div class="header-right">
@@ -113,17 +196,37 @@ const handleIcon = (icon) => {
           </div>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>Action 1</el-dropdown-item>
-              <el-dropdown-item>Action 2</el-dropdown-item>
-              <el-dropdown-item>Action 3</el-dropdown-item>
-              <el-dropdown-item>Action 4</el-dropdown-item>
-              <el-dropdown-item>Action 5</el-dropdown-item>
+              <el-dropdown-item :icon="ArrowDown">刘豪</el-dropdown-item>
+              <el-dropdown-item :icon="Check"
+                >304214637@qq.com</el-dropdown-item
+              >
+              <el-dropdown-item :icon="CircleCheck"
+                >17739229159</el-dropdown-item
+              >
+              <el-dropdown-item :icon="CirclePlus" @click="handleShowDialog"
+                >修改用户信息</el-dropdown-item
+              >
+              <el-dropdown-item :icon="CirclePlusFilled"
+                >退出登陆</el-dropdown-item
+              >
             </el-dropdown-menu>
           </template>
         </el-dropdown>
       </div>
     </div>
   </div>
+
+  <el-dialog v-model="dialogVisible" title="个人信息" width="30%">
+    <span>This is a message</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleConfirmDialog">
+          确认
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <style lang="scss" scoped>

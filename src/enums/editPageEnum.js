@@ -4,6 +4,18 @@ export const SavePageEnum = {
   CLOSE: 'close'
 }
 
+// 同步状态枚举
+export const SyncEnum = {
+  // 等待
+  PENDING: 'pending',
+  // 开始
+  START: 'start',
+  // 成功
+  SUCCESS: 'success',
+  // 失败
+  FAILURE: 'failure'
+}
+
 // 操作枚举
 export const MenuEnum = {
   // 移动

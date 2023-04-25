@@ -58,20 +58,10 @@
           </div>
         </div>
         <div class="userinfo">
-          <!-- <el-badge
-            :is-dot="$store.state.noticeCount > 0 ? true : false"
-            class="notice"
-            type="danger"
-            @click="$router.push('/audit/approve')"
-          >
-            <i class="el-icon-bell"></i>
-          </el-badge> -->
-
           <el-dropdown @command="handleLogout">
             <span class="user-link">
-              <!-- {{ userInfo?.userName }} -->
-              刘豪
-              <el-icon class="icon"><User /></el-icon>
+              {{ userInfo?.userName }}
+              <!-- <el-icon class="icon"><User /></el-icon> -->
             </span>
             <template #dropdown>
               <el-dropdown-menu>
@@ -91,63 +81,58 @@
   </div>
 </template>
 
-<script>
-import TreeMenu from "@/components/TreeMenu/index.vue";
+<script setup>
+import { ref, onMounted, reactive } from "vue";
 import BreadCrumb from "@/components/BreadCrumb/index.vue";
-export default {
-  name: "Home",
-  components: { TreeMenu, BreadCrumb },
-  data() {
-    return {
-      // userInfo: this.$store.state.userInfo,
-      userInfo: null,
-      isCollapse: false,
-      // 造假数据:
-      userMenu: [
-        {
-          _id: 1,
-          menuName: "我的项目",
-          menuType: 1,
-          menuState: 1,
-          path: "/login",
-          children: [
-            {
-              _id: 2,
-              menuName: "我的项目啊啊啊啊啊",
-              menuType: 1,
-              menuState: 1,
-            },
-          ],
-        },
-      ],
-      activeMenu: location.hash.slice(1),
-    };
-  },
-  mounted() {
-    // this.getMenuList();
-  },
-  methods: {
-    handleLogout(key) {
-      if (key === "email") return;
-      this.$store.commit("saveUserInfo", "");
-      this.userInfo = null;
-      this.$router.push("/login");
-    },
-    toggle() {
-      this.isCollapse = !this.isCollapse;
-    },
-    async getMenuList() {
-      try {
-        const { menuList, actionList } = await this.$api.getPermissionList();
-        this.userMenu = menuList;
-        this.$store.commit("saveUserMenu", menuList);
-        this.$store.commit("saveUserAction", actionList);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
+import { useSystemStore } from "@/store/modules/systemStore/index.js";
+import $Api from "@/api/index.js";
+import { clearLocalStorage } from "@/utils";
+import router from "@/router/index.js";
+
+const systemStore = useSystemStore();
+
+const userInfo = reactive({
+  userName: "",
+  userNick: "",
+  userEmail: "",
+});
+const getUserInfo = async () => {
+  try {
+    const data = await $Api.getUserInfoApi({
+      username: systemStore.userInfo.userName,
+    });
+    userInfo.userName = data.userName;
+    userInfo.userNick = data.nick;
+    userInfo.userEmail = data.email;
+  } catch (error) {
+    console.log("获取用户信息错误：", error);
+  }
 };
+const isCollapse = ref(false);
+
+// 退出：
+const handleLogout = (key) => {
+  console.log("key", key);
+  if (key === "email") return;
+  if (key === "logout") {
+    // 清楚 pinia 和 localstorage 里面的数据
+    systemStore.clearUserInfo();
+    clearLocalStorage("GO_SYSTEM");
+    // 提示 跳转登录页
+    window["$message"].success("退出成功！");
+    setTimeout(() => {
+      router.push("/login");
+    }, 500);
+  }
+};
+// 折叠 / 展开
+const toggle = () => {
+  isCollapse.value = !isCollapse.value;
+};
+
+onMounted(() => {
+  getUserInfo();
+});
 </script>
 
 <style lang="scss" scoped>

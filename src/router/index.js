@@ -92,7 +92,7 @@ const routes = [
     },
     {
       name: 'WorkBench',
-      path: '/workbench',
+      path: '/workbench/:id',
       meta: {
           title: '工作台页面'
       },

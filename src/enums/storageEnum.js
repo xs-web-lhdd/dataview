@@ -12,5 +12,7 @@ export const StorageEnum = {
   // 工作台布局配置
   GO_CHART_LAYOUT_STORE: 'GO_CHART_LAYOUT',
   // 工作台需要保存的数据
-  GO_CHART_STORAGE_LIST: 'GO_CHART_STORAGE_LIST'
+  GO_CHART_STORAGE_LIST: 'GO_CHART_STORAGE_LIST',
+  // 登录信息
+  GO_SYSTEM_STORE: 'GO_SYSTEM',
 }

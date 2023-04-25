@@ -33,3 +33,6 @@ export const canvasModelIndex = 9999
 
 // 框选时蒙层的 z-index，需比所有图表高
 export const selectBoxIndex = canvasModelIndex + 10
+
+// 工作台自动保存间隔（s）
+export const saveInterval = 30

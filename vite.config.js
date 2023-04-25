@@ -27,15 +27,14 @@ export default defineConfig({
     open: true,
     // 开发服务器端口
     port: 4000,
-    // proxy: {
-    //   [axiosPre]: {
-    //     // @ts-ignore
-    //     // target: loadEnv(mode, process.cwd()).VITE_DEV_PATH,
-    //     target: loadEnv(mode, process.cwd()).VITE_SERVER_PATH,
-    //     changeOrigin: true,
-    //     // ws: true,
-    //     // secure: true,
-    //   }
-    // }
+    proxy: {
+      '/api/goview': {
+        // target: loadEnv(mode, process.cwd()).VITE_DEV_PATH,
+        target: 'http://localhost:4444',
+        changeOrigin: true,
+        // ws: true,
+        secure: true,
+      }
+    }
   },
 })

@@ -5,69 +5,23 @@ import { isString, getUUID } from '@/utils'
 import { requestInterval, requestIntervalUnit } from '@/settings/designSetting'
 // 记录记录
 import { useChartHistoryStore } from '@/store/modules/chartHistoryStore/index.js'
+import { HistoryActionTypeEnum } from '@/enums/chartHistoryEnum.js'
+import { ChartEditStoreEnum } from '@/enums/chartEditEnum.js'
 
-const HistoryActionTypeEnum = {
-  // 新增
-  ADD: 'add',
-  // 删除
-  DELETE: 'delete',
-  // 更新（位置，属性）
-  UPDATE: 'update',
-  // 移动
-  MOVE: 'move',
-  // 复制
-  COPY: 'copy',
-  // 剪切
-  CUT: 'cut',
-  // 粘贴
-  PASTE: 'paste',
-  // 置顶
-  TOP: 'top',
-  // 置底
-  BOTTOM: 'bottom',
-  // 上移
-  UP: 'up',
-  // 下移
-  DOWN: 'down',
-  // 成组
-  GROUP: 'group',
-  // 解组
-  UN_GROUP: 'unGroup',
-  // 锁定
-  LOCK: 'lock',
-  // 解除锁定
-  UNLOCK: 'unLock',
-  // 隐藏
-  HIDE: 'hide',
-  // 显示
-  SHOW: 'show'
-}
-
-// 对象类型
-const HistoryTargetTypeEnum = {
-  CANVAS: 'canvas',
-  CHART: 'chart'
-}
-
-// Store 枚举
-const ChartEditStoreEnum = {
-  EDIT_RANGE: 'editRange',
-  EDIT_CANVAS: 'editCanvas',
-  RIGHT_MENU_SHOW: 'rightMenuShow',
-  MOUSE_POSITION: 'mousePosition',
-  TARGET_CHART: 'targetChart',
-  RECORD_CHART: 'recordChart',
-  // 以下需要存储
-  EDIT_CANVAS_CONFIG: 'editCanvasConfig',
-  REQUEST_GLOBAL_CONFIG: 'requestGlobalConfig',
-  COMPONENT_LIST: 'componentList'
-}
 
 const chartHistoryStore = useChartHistoryStore()
 
 export const useChartEditStore = defineStore('useChartEditStore', {
   state: () => {
     return {
+      // 项目数据
+      projectInfo: {
+        projectId: '',
+        projectName: '',
+        remarks: '',
+        thumbnail: '',
+        release: false
+      },
       // 右键菜单
       rightMenuShow: false,
        // 画布属性
@@ -171,6 +125,9 @@ export const useChartEditStore = defineStore('useChartEditStore', {
     }
   },
   getters: {
+    getProjectInfo() {
+      return this.projectInfo
+    },
     getMousePosition() {
       return this.mousePosition
     },
@@ -205,6 +162,14 @@ export const useChartEditStore = defineStore('useChartEditStore', {
     }
   },
   actions: {
+    // * 设置 editCanvasConfig（需保存后端） 数据项
+    setEditCanvasConfig(key, value) {
+      this.editCanvasConfig[key] = value
+    },
+    // * 设置 peojectInfo 数据项
+    setProjectInfo(key, value) {
+      this.projectInfo[key] = value
+    },
     // * 设置 editCanvas 数据项
     setEditCanvas(key, value) {
       this.editCanvas[key] = value

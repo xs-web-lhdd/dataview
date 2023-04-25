@@ -6,7 +6,7 @@ import axios from 'axios'
 import config from './../config'
 import { ElMessage } from 'element-plus'
 import router from './../router'
-import storage from './storage'
+import { getLocalStorage } from '@/utils'
 
 const TOKEN_INVALID = 'Token认证失败，请重新登录'
 const NETWORK_ERROR = '网络请求异常，请稍后重试'
@@ -19,9 +19,21 @@ const service = axios.create({
 
 // 请求拦截
 service.interceptors.request.use((req) => {
-    const headers = req.headers;
-    const { token = "" } = storage.getItem('userInfo') || {};
-    if (!headers.Authorization) headers.Authorization = 'Bearer ' + token;
+    // 白名单：登陆接口
+    if(req.url === '/sys/login') return req
+    // 获取 token
+    const info = getLocalStorage('GO_SYSTEM')
+    // 重新登陆
+    if(!info) {
+      window['$message'].warning('请先登陆！')
+      router.push('/login')
+      return req
+    }
+    const userInfo = info.userInfo
+    req.headers = {
+      ...req.headers,
+      [userInfo.tokenName || 'token']: userInfo.userToken || ''
+    }
     return req;
 })
 

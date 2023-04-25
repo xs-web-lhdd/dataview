@@ -40,9 +40,49 @@ export const routerTurnByPath = (
 }
 
 /**
+ * * 根据名字跳转路由
+ * @param pageName
+ * @param isReplace
+ * @param windowOpen
+ */
+export const routerTurnByName = (
+  pageName,
+  isReplace,
+  windowOpen
+) => {
+  if (windowOpen) {
+    const path = fetchPathByName(pageName, 'href')
+    openNewWindow(path)
+    return
+  }
+  if (isReplace) {
+    router.replace({
+      name: pageName,
+    })
+    return
+  }
+  router.push({
+    name: pageName,
+  })
+}
+
+/**
  * * 新开页面
  * @param url
  */
 export const openNewWindow = (url) => {
   return window.open(url, '_blank')
+}
+
+/**
+ * * 通过硬解析获取当前路由下的参数
+ * @returns object
+ */
+export const fetchRouteParamsLocation = () => {
+  try {
+    return document.location.hash.split('/').pop() || ''
+  } catch (error) {
+    window['$message'].warning('查询路由信息失败，请联系管理员！')
+    return ''
+  }
 }

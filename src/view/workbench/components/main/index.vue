@@ -1,5 +1,5 @@
 <script setup>
-import Dropdown from "@/components/Dropdown/index.vue";
+import { onMounted } from "vue";
 //  左侧图表部分
 import Charts from "./components/charts/index.vue";
 // 右侧图表配置项部分
@@ -10,79 +10,19 @@ import EditRuler from "./components/editRuler/index.vue";
 import EditCanvas from "./components/editCanvas/index.vue";
 import { useChartEditStore } from "@/store/modules/chartEditStore/index.js";
 import { useContextMenu } from "./hooks/useContentMenu.js";
+import { useSync } from "./hooks/useSync.js";
 
 const chartEditStore = useChartEditStore();
-const packages = [
-  {
-    label: "图表",
-    icon: "xxx",
-    children: [
-      {
-        label: "所有",
-        charts: [
-          {
-            name: "柱状图",
-            img: "xxxxx",
-          },
-          {
-            name: "横向柱状图",
-            img: ",,,,",
-          },
-        ],
-      },
-      {
-        label: "饼图",
-        charts: [
-          {
-            name: "饼图",
-            img: "xxxxx",
-          },
-          {
-            name: "饼图-环型",
-            img: ",,,,",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: "信息",
-    icon: "message",
-    children: [
-      {
-        label: "文本",
-        children: [
-          {
-            label: "文本",
-            img: "xxx",
-          },
-          {
-            label: "渐变文字",
-            img: "xxx",
-          },
-        ],
-      },
-      {
-        label: "更多",
-        children: [
-          {
-            label: "图片",
-            img: "xxx",
-          },
-          {
-            label: "轮播图",
-            img: "xxx",
-          },
-        ],
-      },
-    ],
-  },
-];
-// import { getPackagesList } from "./hooks/useAside";
-// console.log(getPackagesList);
 // 右键
 const { menuOptions, onClickOutSide, mousePosition, handleMenuSelect } =
   useContextMenu();
+// 数据
+const { dataSyncFetch, intervalDataSyncUpdate } = useSync();
+
+onMounted(() => {
+  dataSyncFetch();
+  intervalDataSyncUpdate();
+});
 </script>
 
 <template>

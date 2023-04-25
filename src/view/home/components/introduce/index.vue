@@ -10,7 +10,7 @@
                 {{ info }}
               </li>
             </ul>
-            <div class="info-btn">{{ item.btn }}</div>
+            <div class="info-btn" @click="handleUse">{{ item.btn }}</div>
           </div>
           <div class="introduce-left-img" v-for="img in item.imgList">
             <img :src="img" alt="" />
@@ -27,7 +27,7 @@
                 {{ info }}
               </li>
             </ul>
-            <div class="info-btn">{{ item.btn }}</div>
+            <div class="info-btn" @click="handleUse">{{ item.btn }}</div>
           </div>
         </template>
       </div>
@@ -36,6 +36,8 @@
 </template>
 
 <script setup>
+import router from "@/router/index.js";
+
 import IntroduceOneOne from "../../../../assets/images/home/introduce1-1.png";
 import IntroduceOneTwo from "../../../../assets/images/home/introduce1-2.png";
 import IntroduceOneThree from "../../../../assets/images/home/introduce1-3.png";
@@ -53,6 +55,9 @@ import IntroduceFourFive from "../../../../assets/images/home/introduce4-5.png";
 import IntroduceFiveOne from "../../../../assets/images/home/introduce5-1.png";
 import IntroduceFiveTwo from "../../../../assets/images/home/introduce5-2.png";
 import IntroduceFiveThree from "../../../../assets/images/home/introduce5-3.png";
+
+import { getLocalStorage } from "@/utils";
+
 const listData = [
   {
     title: "整合各类数据，全面分析业务",
@@ -108,6 +113,13 @@ const listData = [
     btn: "开始使用",
   },
 ];
+// 获取用户信息：
+const userInfo = getLocalStorage("GO_SYSTEM");
+
+const handleUse = () => {
+  if (userInfo) router.push("/project/welcome");
+  else router.push("/login");
+};
 </script>
 
 <style lang="scss" scoped>

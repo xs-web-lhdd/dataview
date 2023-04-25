@@ -2,10 +2,10 @@
 
 <template>
   <div class="main">
-    <div class="item" v-for="item in 10">
+    <div class="item" v-for="item in projectList">
       <div class="operate">
         <div class="publish">
-          <div v-if="true" style="position: relative">
+          <div v-if="item.state == 1" style="position: relative">
             <el-icon style="color: #67c23a; position: absolute; top: 1px"
               ><SuccessFilled
             /></el-icon>
@@ -18,20 +18,20 @@
             <span style="font-size: 16px; margin-left: 18px">未发布</span>
           </div>
         </div>
-        <div class="icon" @click="handOperate('delete')">
+        <div class="icon" @click="handOperate('delete', item.id)">
           <el-icon style="color: #f56c6c"><Delete /></el-icon>
         </div>
-        <div class="icon" @click="handOperate('view')">
+        <div class="icon" @click="handOperate('view', item.id)">
           <el-icon style="color: #67c23a"><View /></el-icon>
         </div>
       </div>
       <div class="img">
-        <img src="../../../../assets/images/home/icon1.png" alt="" />
+        <img :src="item.indexImage" alt="" />
       </div>
       <div class="option">
-        <el-text type="primary" class="option-text mx-1" size="large"
-          >Success</el-text
-        >
+        <el-text type="primary" class="option-text mx-1" size="large">{{
+          item.projectName
+        }}</el-text>
         <div class="option-edit">
           <el-tooltip
             class="box-item"
@@ -39,18 +39,13 @@
             content="编辑"
             placement="top-start"
           >
-            <el-button type="primary" plain @click="handleEdit">
+            <el-button type="primary" plain @click="handleEdit(item.id)">
               <el-icon><Edit /></el-icon>
             </el-button>
           </el-tooltip>
         </div>
 
-        <el-dropdown>
-          <!-- <el-button type="primary">
-            Dropdown List<el-icon class="el-icon--right"
-              ><arrow-down
-            /></el-icon>
-          </el-button> -->
+        <el-dropdown @command="(key) => handleSelect(key, item.id)">
           <el-button type="primary" plain>
             <el-icon><More /></el-icon>
           </el-button>
@@ -60,6 +55,7 @@
                 v-for="item in selectList"
                 :key="item.label"
                 :icon="item.icon"
+                :command="item.command"
                 >{{ item.label }}</el-dropdown-item
               >
             </el-dropdown-menu>
@@ -84,10 +80,12 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import $Api from "@/api/index.js";
+import { useSystemStore } from "@/store/modules/systemStore/index.js";
 import {
   ArrowDown,
-  Check,
   DocumentCopy,
   CircleCheck,
   CirclePlus,
@@ -95,60 +93,131 @@ import {
   Plus,
 } from "@element-plus/icons-vue";
 
+const systemStore = useSystemStore();
 const router = useRouter();
-const handleEdit = () => {
-  router.push("/");
+const projectList = ref([]);
+
+const selectList = [
+  {
+    icon: ArrowDown,
+    label: "预览",
+    command: "preview",
+  },
+  {
+    icon: DocumentCopy,
+    label: "克隆",
+    command: "clone",
+  },
+  {
+    icon: CircleCheck,
+    label: "重命名",
+    command: "rename",
+  },
+  {
+    icon: CirclePlusFilled,
+    label: "取消发布",
+    command: "cancel",
+  },
+  {
+    icon: CirclePlus,
+    label: "下载",
+    command: "download",
+  },
+  {
+    icon: Plus,
+    label: "删除",
+    command: "delete",
+  },
+];
+
+const handleEdit = (projectId) => {
+  router.push(`/workbench/${projectId}`);
 };
 const handleCreate = () => {
   router.push("/workbench");
 };
-const handleDelete = () => {
+const handleDelete = (projectId) => {
   console.log("删除操作");
 };
-const handleView = () => {
+const handleView = (projectId) => {
   console.log("放大操作");
 };
-const handOperate = (directive) => {
+const handlePreview = (projectId) => {
+  router.push(`/chart/preview/${projectId}`);
+  window["$message"].success("预览操作");
+};
+const handleClone = (projectId) => {
+  window["$message"].success("克隆操作");
+};
+const handleRename = (projectId) => {
+  window["$message"].success("重命名操作");
+};
+const handleCancel = (projectId) => {
+  window["$message"].success("取消发布操作");
+};
+const handleDownload = (projectId) => {
+  window["$message"].success("下载操作");
+};
+const handOperate = (directive, projectId) => {
   switch (directive) {
     case "delete":
-      handleDelete();
+      handleDelete(projectId);
       break;
     case "view":
-      handleView();
+      handleView(projectId);
       break;
     case "edit":
-      handleEdit();
+      handleEdit(projectId);
     case "create":
       handleCreate();
       break;
   }
 };
-const selectList = [
-  {
-    icon: ArrowDown,
-    label: "预览",
-  },
-  {
-    icon: DocumentCopy,
-    label: "克隆",
-  },
-  {
-    icon: CircleCheck,
-    label: "重命名",
-  },
-  {
-    icon: CirclePlusFilled,
-    label: "取消发布",
-  },
-  {
-    icon: CirclePlus,
-    label: "下载",
-  },
-  {
-    icon: Plus,
-    label: "删除",
-  },
-];
+const handleSelect = (directive, projectId) => {
+  console.log(directive, projectId);
+
+  switch (directive) {
+    case "preview":
+      handlePreview(projectId);
+      break;
+    case "clone":
+      handleClone(projectId);
+      break;
+    case "rename":
+      handleRename(projectId);
+      break;
+    case "cancel":
+      handleCancel(projectId);
+      break;
+    case "download":
+      handleDownload(projectId);
+      break;
+    case "delete":
+      handleDelete(projectId);
+      break;
+  }
+};
+
+// 初始化获取项目列表
+const getProjectList = async () => {
+  try {
+    const data = await $Api.getProjectList({
+      page: 1,
+      limit: 10,
+      createUserId: systemStore.userInfo.userId,
+    });
+    if (data) {
+      projectList.value = data;
+    }
+    console.log("项目", data);
+  } catch (error) {
+    console.log("获取项目列表出错：", error);
+  }
+};
+
+onMounted(() => {
+  getProjectList();
+});
 </script>
 
 <style lang="scss">

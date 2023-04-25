@@ -1,4 +1,22 @@
 /**
+ * * base64转file
+ * @param dataurl
+ * @param fileName
+ * @returns
+ */
+export const base64toFile = (dataurl, fileName) => {
+  let dataArr = dataurl.split(","),
+  mime = dataArr[0].match(/:(.*?);/)[1],
+  bstr = atob(dataArr[1]),
+  n = bstr.length,
+  u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], fileName, { type: mime });
+}
+
+/**
  * *获取上传的文件数据
  * @param { File } file 文件对象
  */
