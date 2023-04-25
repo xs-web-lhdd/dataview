@@ -38,6 +38,21 @@ export const getLocalStorage = (k) => {
 }
 
 /**
+ * * 存储本地会话数据
+ * @param k 键名
+ * @param v 键值（无需stringiiy）
+ * @returns RemovableRef
+ */
+export const setLocalStorage = (k, v) => {
+  try {
+    window.localStorage.setItem(k, JSONStringify(v))
+  } catch (error) {
+    return false
+  }
+}
+
+
+/**
  * * 存储临时会话数据
  * @param k 键名
  * @param v 键值

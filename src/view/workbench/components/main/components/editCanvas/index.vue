@@ -2,12 +2,20 @@
 
 <script setup>
 import EditRange from "./components/editRange/index.vue";
+import { useContextMenu } from "../../hooks/useContentMenu.js";
 import { useLayout } from "../../hooks/useLayout";
 useLayout();
+const { handleContextMenu } = useContextMenu();
 </script>
 
 <template>
-  <div class="go-chart-edit-content edit-canvas" id="go-chart-edit-content">
+  <!-- 画布主体 -->
+  <div
+    class="go-chart-edit-content edit-canvas"
+    id="go-chart-edit-content"
+    @contextmenu="handleContextMenu"
+  >
+    <!-- 展示 -->
     <EditRange></EditRange>
   </div>
 </template>
@@ -17,7 +25,7 @@ useLayout();
   border-radius: 10px;
   overflow: hidden;
   min-width: 400px !important;
-  background-color: aquamarine;
+  // background-color: aquamarine;
   transition: all 0.2s linear;
 }
 </style>

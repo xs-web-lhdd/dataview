@@ -135,11 +135,6 @@ const dragCanvas = (e) => {
     >
     </sketch-rule>
     <div ref="$app" class="edit-screens" @scroll="handleScroll">
-      <!-- <div
-        ref="$container"
-        class="edit-screen-container"
-        :style="{ width: width * 2 + 'px' }"
-      > -->
       <div
         ref="$container"
         class="edit-screen-container"

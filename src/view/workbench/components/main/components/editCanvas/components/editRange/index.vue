@@ -2,6 +2,7 @@
 import { computed, toRefs } from "vue";
 import { useChartEditStore } from "@/store/modules/chartEditStore/index.js";
 import EditShapeBox from "../editShapeBox/index.vue";
+import EditSelect from "../EditSelect/index.vue";
 import { useContextMenu } from "../../../../hooks/useContentMenu.js";
 import {
   mousedownBoxSelect,
@@ -15,6 +16,7 @@ import {
   animationsClass,
   colorCustomMerge,
 } from "@/utils";
+import { MenuEnum } from "@/enums/editPageEnum.js";
 
 const chartEditStore = useChartEditStore();
 const { handleContextMenu } = useContextMenu();
@@ -27,7 +29,29 @@ const size = computed(() => {
   };
 });
 
+// 背景
 const rangeStyle = computed(() => {
+  // 设置背景色和图片背景
+  const background = chartEditStore.getEditCanvasConfig.background;
+  const backgroundImage = chartEditStore.getEditCanvasConfig.backgroundImage;
+  const selectColor = chartEditStore.getEditCanvasConfig.selectColor;
+  const backgroundColor = background ? background : undefined;
+
+  const computedBackground = selectColor
+    ? { background: backgroundColor }
+    : {
+        background: `url(${backgroundImage}) no-repeat center center / cover !important`,
+      };
+
+  return {
+    ...computedBackground,
+    width: "inherit",
+    height: "inherit",
+  };
+});
+
+// 背景
+const rangeStyleRange = computed(() => {
   // 缩放
   const scale = {
     transform: `scale(${getEditCanvas.value.scale})`,
@@ -65,50 +89,7 @@ const themeColor = computed(() => {
     chartEditStore.getEditCanvasConfig.chartThemeColor
   ];
 });
-// 操作枚举
-const MenuEnum = {
-  // 移动
-  ARROW_UP: "up",
-  ARROW_RIGHT: "right",
-  ARROW_DOWN: "down",
-  ARROW_LEFT: "left",
-  // 删除
-  DELETE: "delete",
-  // 复制
-  COPY: "copy",
-  // 剪切
-  CUT: "cut",
-  // 粘贴
-  PARSE: "parse",
-  // 置顶
-  TOP: "top",
-  // 置底
-  BOTTOM: "bottom",
-  // 上移
-  UP: "up",
-  // 下移
-  DOWN: "down",
-  // 清空剪贴板
-  CLEAR: "clear",
-  // 成组
-  GROUP: "group",
-  // 解组
-  UN_GROUP: "unGroup",
-  // 后退
-  BACK: "back",
-  // 前进
-  FORWORD: "forward",
-  // 保存
-  SAVE: "save",
-  // 锁定
-  LOCK: "lock",
-  // 解除锁定
-  UNLOCK: "unLock",
-  // 隐藏
-  HIDE: "hide",
-  // 显示
-  SHOW: "show",
-};
+
 // 右键事件
 const optionsHandle = (targetList, allList, targetInstance) => {
   console.log("画板-触发右键事件了！！！");
@@ -136,10 +117,9 @@ const optionsHandle = (targetList, allList, targetInstance) => {
 <template>
   <div
     class="go-edit-range go-transition"
-    :style="rangeStyle"
+    :style="rangeStyleRange"
     @mousedown="mousedownBoxSelect($event, undefined)"
   >
-    <!-- <slot></slot> -->
     <!-- 滤镜预览 -->
     <div
       :style="{
@@ -174,12 +154,7 @@ const optionsHandle = (targetList, allList, targetInstance) => {
           @mousedown="mousedownHandle($event, item)"
           @contextmenu="handleContextMenu($event, item, optionsHandle)"
         >
-          <!-- 右键 @contextmenu="handleContextMenu($event, item, optionsHandle)" -->
-          <!-- @mouseenter="mouseenterHandle($event, item)"
-          @mouseleave="mouseleaveHandle($event, item)"
-          @mousedown="mousedownHandle($event, item)" -->
-          <!-- 渲染拖拽到画布上的图表组件 -->
-          <!-- <component
+          <component
             class="edit-content-chart"
             :class="animationsClass(item.styles.animations)"
             :is="item.chartConfig.chartKey"
@@ -191,24 +166,15 @@ const optionsHandle = (targetList, allList, targetInstance) => {
               ...getFilterStyle(item.styles),
               ...getTransformStyle(item.styles),
             }"
-          ></component> -->
-          <component
-            class="edit-content-chart"
-            :class="animationsClass(item.styles.animations)"
-            :is="item.chartConfig.chartKey"
-            :chartConfig="item"
-            :themeSetting="themeSetting"
-            themeColor="red"
-            :style="{
-              ...useSizeStyle(item.attr),
-              ...getFilterStyle(item.styles),
-              ...getTransformStyle(item.styles),
-            }"
           ></component>
         </EditShapeBox>
       </div>
     </div>
 
+    <!-- 水印 -->
+    <!-- 拖拽时的辅助线 -->
+    <!-- 框选时的样式框 -->
+    <EditSelect></EditSelect>
     <!-- 拖拽时的遮罩 -->
     <div class="go-edit-range-model" :style="rangeModelStyle"></div>
   </div>

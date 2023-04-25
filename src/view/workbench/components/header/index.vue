@@ -78,15 +78,15 @@ const handleIcon = (icon) => {
       </div>
     </div>
     <div class="header-right">
-      <div class="preview" @click="handleIcon('preview')">
+      <div class="preview btn" @click="handleIcon('preview')">
         <el-icon class="preview-icon"><View /></el-icon>
         <span class="preview-text">预览</span>
       </div>
-      <div class="published">
+      <div class="published btn">
         <el-icon class="published-icon"><SuccessFilled /></el-icon>
         <span class="published-text">发布</span>
       </div>
-      <div class="language">
+      <div class="language btn">
         <el-tooltip
           class="box-item"
           effect="dark"
@@ -96,7 +96,7 @@ const handleIcon = (icon) => {
           <el-icon><Flag /></el-icon>
         </el-tooltip>
       </div>
-      <div class="theme">
+      <div class="theme btn">
         <el-tooltip
           class="box-item"
           effect="dark"
@@ -106,7 +106,7 @@ const handleIcon = (icon) => {
           <el-icon><Moon /></el-icon>
         </el-tooltip>
       </div>
-      <div class="userinfo">
+      <div class="userinfo btn">
         <el-dropdown placement="bottom">
           <div class="userinfo-avatar">
             <img src="../../../../assets/images/avatar.png" alt="" />
@@ -179,6 +179,7 @@ const handleIcon = (icon) => {
       margin: 10px 20px 10px 0;
       padding: 3px;
       box-sizing: border-box;
+      cursor: pointer;
       &-icon {
         position: absolute;
         top: 10px;
@@ -246,6 +247,9 @@ const handleIcon = (icon) => {
           border-radius: 50%;
         }
       }
+    }
+    .btn {
+      cursor: pointer;
     }
   }
 }

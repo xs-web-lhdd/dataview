@@ -26,7 +26,7 @@
 <script setup>
 import { computed } from "vue";
 import { useChartEditStore } from "@/store/modules/chartEditStore/index.js";
-import { useGlobalStore } from "@/store/modules/globalStore/index.js";
+import { useDesignStore } from "@/store/modules/designStore/index.js";
 
 import { useSizeStyle, usePointStyle } from "../../hooks/useStyle.js";
 import { useMousePointHandle } from "../../../../hooks/useDrag.js";
@@ -42,7 +42,7 @@ const props = defineProps({
   },
 });
 
-const designStore = useGlobalStore();
+const designStore = useDesignStore();
 const chartEditStore = useChartEditStore();
 
 // 锚点
@@ -53,7 +53,7 @@ const cursorResize = ["n", "e", "s", "w", "nw", "ne", "sw", "se"];
 
 // 颜色
 const themeColor = computed(() => {
-  // return designStore.getAppTheme;
+  return designStore.getAppTheme;
 });
 
 // 计算当前选中目标
@@ -152,10 +152,8 @@ const hide = computed(() => {
       border: 2px solid rgba(0, 0, 0, 0);
       &.selectActive,
       &.hoverActive {
-        // border-color: v-bind("themeColor");
-        border-color: #409eff;
+        border-color: v-bind("themeColor");
         border-width: 2px;
-        background-color: rgba($color: #409eff, $alpha: 0.2);
       }
       &.hoverActive {
         border-style: dotted;

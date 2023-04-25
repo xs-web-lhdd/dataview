@@ -47,6 +47,7 @@ app.use(ElementPlus)
    .use(store)
    .mount('#app')
 
+// ElementPlus 全部 icon 注册
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }

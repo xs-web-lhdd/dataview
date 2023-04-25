@@ -5,8 +5,14 @@
     </div>
     <div class="item-title">{{ props.componentData.chartConfig.title }}</div>
     <div class="item-icon">
-      <el-icon class="icon"><Lock /></el-icon>
-      <el-icon class="icon"><View /></el-icon>
+      <el-icon class="icon" @click="handleLock">
+        <Lock class="icon-color" v-if="props.componentData.status.lock" />
+        <Unlock v-else />
+      </el-icon>
+      <el-icon class="icon" @click="handleHide">
+        <View v-if="!props.componentData.status.hide" />
+        <Hide class="icon-color" v-else />
+      </el-icon>
     </div>
   </div>
 </template>
@@ -33,11 +39,26 @@ const props = defineProps({
   },
 });
 
+console.log("props.componentData", props.componentData);
+
 // 计算当前选中目标
 const select = computed(() => {
   const id = props.componentData.id;
   return chartEditStore.getTargetChart.selectId.find((e) => e === id);
 });
+
+const handleLock = (e) => {
+  e.stopPropagation();
+  props.componentData.status.lock
+    ? chartEditStore.setUnLock()
+    : chartEditStore.setLock();
+};
+const handleHide = (e) => {
+  e.stopPropagation();
+  props.componentData.status.hide
+    ? chartEditStore.setShow()
+    : chartEditStore.setHide();
+};
 </script>
 
 <style lang="scss" scoped>
@@ -69,6 +90,9 @@ const select = computed(() => {
       cursor: pointer;
       margin-left: 5px;
       transition: color 0.3s linear;
+      &-color {
+        color: #409eff;
+      }
     }
     .icon:hover {
       color: #409eff;

@@ -5,3 +5,9 @@ export const PreviewScaleEnum = {
   SCROLL_X: 'scrollX',
   FULL: 'full'
 }
+
+// 主题
+export const ThemeEnum = {
+  DARK: 'dark',
+  LIGHT: 'light'
+}
