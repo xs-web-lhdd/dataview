@@ -63,17 +63,19 @@
     </el-timeline-item>
     <el-timeline-item timestamp="数据内容" placement="top">
       <div class="btn">
-        <div>
+        <div style="margin-right: 10px" v-if="!ajax">
           <el-upload
-            v-model:file-list="fileList"
-            class="upload-demo"
+            v-model:file-list="uploadFileListRef"
             action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+            :show-file-list="false"
+            :before-upload="beforeUpload"
+            :http-request="customRequest"
           >
             <el-button type="primary" plain>导入 JSON / Txt</el-button>
           </el-upload>
         </div>
         <div>
-          <el-button type="primary" plain>下载</el-button>
+          <el-button type="primary" plain @click="download">下载</el-button>
           <el-tooltip
             effect="dark"
             content="点击 【下载】查看完整数据"
@@ -83,6 +85,14 @@
           </el-tooltip>
         </div>
       </div>
+      <el-card>
+        <prism-editor
+          class="my-editor"
+          v-model="code"
+          :highlight="highlighter"
+          :readonly="true"
+        ></prism-editor>
+      </el-card>
     </el-timeline-item>
   </el-timeline>
 </template>
@@ -92,6 +102,14 @@
  * * 数据映射 数据内容
  */
 import { ref, computed, watch } from "vue";
+// 引入 code 高亮组件
+import { PrismEditor } from "vue-prism-editor";
+import "vue-prism-editor/dist/prismeditor.min.css";
+import { highlight, languages } from "prismjs/components/prism-core";
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-javascript";
+import "prismjs/themes/prism-tomorrow.css"; // import syntax highlighting styles
+
 import { RequestDataTypeEnum } from "@/enums/httpEnum.js";
 import { useFile } from "../hooks/useFile.js";
 import { useTargetData } from "../../../hooks/useTargetData.js";
@@ -105,10 +123,10 @@ const props = defineProps({
     type: Boolean,
     required: false,
   },
-  // ajax: {
-  //   type: Boolean,
-  //   required: true,
-  // },
+  ajax: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 const ChartFrameEnum = {
@@ -122,16 +140,14 @@ const ChartFrameEnum = {
   STATIC: "static",
 };
 
-// 表格标题
-const tableTitle = ["字段", "映射", "状态"];
-
+const code = ref("");
 const source = ref();
 const dimensions = ref([]);
 const dimensionsAndSource = ref();
 const noData = ref(false);
 
-// const { uploadFileListRef, customRequest, beforeUpload, download } =
-//   useFile(targetData);
+const { uploadFileListRef, customRequest, beforeUpload, download } =
+  useFile(targetData);
 
 // 是否展示过滤器
 // const filterShow = computed(() => {
@@ -166,11 +182,9 @@ const matchingHandle = (mapping) => {
 
 // 处理映射列表
 const dimensionsAndSourceHandle = (dimensions) => {
-  console.log(dimensions);
   try {
     // 去除首项数据轴标识
     return dimensions.map((item, index) => {
-      console.log(index, item);
       return index === 0
         ? {
             field: "通用标识",
@@ -189,6 +203,10 @@ const dimensionsAndSourceHandle = (dimensions) => {
   }
 };
 
+const highlighter = (code) => {
+  return highlight(code, languages.js); // languages.<insert language> to return html with markup
+};
+
 watch(
   () => targetData.value?.option?.dataset,
   (newData) => {
@@ -199,6 +217,9 @@ watch(
       // 有新数据并且是 echarts 类型的数据
       // 只有 DataSet 数据才有对应的格式
       source.value = newData;
+
+      code.value = toString(source.value);
+
       if (isCharts.value) {
         dimensions.value = newData.dimensions;
         dimensionsAndSource.value = dimensionsAndSourceHandle(dimensions.value);
@@ -224,18 +245,36 @@ watch(
 
 <style lang="scss" scoped>
 .go-chart-configurations-timeline {
-  :deep() {
-    pre {
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-  }
   .source-btn-box {
     margin-top: 10px !important;
   }
 }
 .btn {
   display: flex;
-  // justify-content: space-between;
+}
+:deep(.el-card) {
+  margin-top: 10px;
+}
+
+/* vue-prism-editor 设置的 CSS */
+.my-editor {
+  /* we dont use `language-` classes anymore so thats why we need to add background and text color manually */
+  // background: #2d2d2d;
+  color: #ccc;
+
+  /* you must provide font-family font-size line-height. Example: */
+  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 5px;
+
+  /* optional class for removing the outline */
+  :deep(.prism-editor__textarea) {
+    // -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* 选中态 */
+    // -webkit-focus-ring-color: rgba(255, 255, 255, 0); /* 聚焦态 */
+    // background-color: #fff; /* 设置背景色 */
+    border: none; /* 去除边框 */
+    outline: none; /* 去除外边框 */
+  }
 }
 </style>

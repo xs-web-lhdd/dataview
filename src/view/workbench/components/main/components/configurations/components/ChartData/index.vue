@@ -33,8 +33,8 @@ const selectValue = ref(0);
       </el-select>
     </el-form-item>
   </el-form>
-  <ChartDataStatic v-if="selectValue == 0" />
-  <ChartDataAjax v-if="selectValue == 1" :show="false" />
+  <ChartDataStatic v-if="selectValue == 0" :show="false" :ajax="false" />
+  <ChartDataAjax v-if="selectValue == 1" />
 </template>
 
 <style lang="scss" scoped></style>

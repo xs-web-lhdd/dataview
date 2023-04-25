@@ -3,11 +3,10 @@ import { FileTypeEnum } from '@/enums/fileTypeEnum'
 import { readFile, downloadTextFile, JSONStringify, JSONParse } from '@/utils'
 
 export const useFile = (targetData) => {
-  const uploadFileListRef = ref()
+  const uploadFileListRef = ref([])
 
-  const beforeUpload = ({ file }) => {
-    uploadFileListRef.value = []
-    const type = file.file.type
+  const beforeUpload = (file) => {
+    const type = file.type
     if (type !== FileTypeEnum.JSON && type !== FileTypeEnum.TXT) {
       window['$message'].warning('仅支持上传 【JSON】 格式文件，请重新上传！')
       return false
@@ -19,8 +18,8 @@ export const useFile = (targetData) => {
   const customRequest = (options) => {
     const { file } = options
     nextTick(() => {
-      if (file.file) {
-        readFile(file.file).then((fileData) => {
+      if (file) {
+        readFile(file).then((fileData) => {
           targetData.value.option.dataset = JSONParse(fileData)
         })
       } else {
@@ -34,6 +33,7 @@ export const useFile = (targetData) => {
     try {
       window['$message'].success('下载中，请耐心等待...')
       downloadTextFile(JSONStringify(targetData.value.option.dataset), undefined, 'json')
+      window['$message'].success('下载成功！！！')
     } catch (error) {
       window['$message'].error('下载失败，数据错误！')
     }
