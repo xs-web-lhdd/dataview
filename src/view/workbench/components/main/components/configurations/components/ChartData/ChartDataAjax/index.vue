@@ -1,23 +1,62 @@
 <!-- 动态数据选项卡 -->
 
 <script setup>
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, toRefs, toRaw } from "vue";
 import ChartDataAjaxDialog from "../ChartDataAjaxDialog/index.vue";
+import ChartDataMatchingAndShow from "../ChartDataMatchingAndShow/index.vue";
+import { useTargetData } from "../../../hooks/useTargetData.js";
+import { customizeHttp } from "@/api/http.js";
+import { newFunctionHandle } from "@/utils";
 
-const showModel = ref(false);
-const request = reactive({
-  requestContentType: "普通请求",
-  requestHttpType: "PUT",
-  requestOriginUrl: "https://localhost:4000",
-  requestApi: "/login",
+const { targetData, chartEditStore } = useTargetData();
+const {
+  requestOriginUrl,
+  requestInterval: GlobalRequestInterval,
+  requestIntervalUnit: GlobalRequestIntervalUnit,
+} = toRefs(chartEditStore.getRequestGlobalConfig);
+
+const showMatching = ref(false);
+const requestShow = ref(false);
+
+const requestContentType = computed(() => {
+  if (targetData.value.request.requestContentType === 1) return "SQL请求";
+  else return "普通请求";
 });
-
-const requestUrl = computed(() => {
-  return request.requestOriginUrl + request.requestApi;
-});
-
+const requestAllUrl = computed(
+  () => requestOriginUrl.value + targetData.value.request.requestUrl
+);
+// 受否展示弹窗
 const handleShowModel = () => {
-  showModel.value = !showModel.value;
+  requestShow.value = true;
+};
+// 发送请求
+const sendHandle = async () => {
+  if (!targetData.value?.request) return;
+  // loading.value = true;
+  try {
+    const res = await customizeHttp(
+      toRaw(targetData.value.request),
+      toRaw(chartEditStore.getRequestGlobalConfig)
+    );
+    // loading.value = false;
+    console.log("sendHandle 获取的数据 --->>> ", res);
+    // if (!res?.data && !targetData.value.filter)
+    //   window["$message"].warning("您的数据不符合默认格式，请配置过滤器！");
+    if (res) {
+      // targetData.value.option.dataset = newFunctionHandle(
+      //   res?.data,
+      //   res,
+      //   targetData.value.filter
+      // );
+      targetData.value.option.dataset = res;
+      window["$message"].success("数据获取成功！");
+      showMatching.value = true;
+    }
+  } catch (error) {
+    // loading.value = false;
+    console.log("sendHandle 的错误：", error);
+    window["$message"].warning("数据异常，请检查参数！");
+  }
 };
 </script>
 
@@ -26,26 +65,37 @@ const handleShowModel = () => {
     <el-card class="ajax-card">
       <el-form>
         <el-form-item class="form-item" label="请求类型">
-          <el-input disabled v-model="request.requestContentType" />
+          <el-input disabled v-model="requestContentType" />
         </el-form-item>
         <el-form-item class="form-item" label="请求方式 ">
-          <el-input disabled v-model="request.requestHttpType" />
+          <el-input disabled v-model="targetData.request.requestHttpType" />
         </el-form-item>
         <el-form-item class="form-item" label="请求根地址">
-          <el-input disabled v-model="request.requestOriginUrl" />
+          <el-input disabled v-model="requestOriginUrl" />
         </el-form-item>
         <el-form-item class="form-item" label="请求相对地址">
-          <el-input disabled v-model="request.requestApi" />
+          <el-input disabled v-model="targetData.request.requestUrl" />
         </el-form-item>
         <el-form-item class="form-item" label="请求地址">
-          <el-input disabled v-model="requestUrl" />
+          <el-input disabled v-model="requestAllUrl" />
         </el-form-item>
       </el-form>
     </el-card>
     <div class="ajax-mask"></div>
     <div class="ajax-info" @click="handleShowModel">编辑配置</div>
   </div>
-  <ChartDataAjaxDialog :showModel="showModel" :request="request" />
+  <div style="display: flex; margin-bottom: 20px">
+    <div>测试：</div>
+    <el-button type="primary" @click="sendHandle">发送请求？</el-button>
+  </div>
+
+  <ChartDataMatchingAndShow :show="showMatching" :ajax="true" />
+
+  <ChartDataAjaxDialog
+    v-model:modelShow="requestShow"
+    :targetData="targetData"
+    @sendHandle="sendHandle"
+  />
 </template>
 
 <style lang="scss" scoped>
@@ -55,6 +105,7 @@ const handleShowModel = () => {
   border-radius: 5px;
   border: 1px solid #fff;
   transition: border 0.1s ease-in-out;
+  margin-bottom: 20px;
   &-card {
     padding: 10px !important;
     .form-item {

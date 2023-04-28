@@ -1,11 +1,27 @@
 <!-- 画布主体 -->
 
 <script setup>
+// import { watch } from "vue";
 import EditRange from "./components/editRange/index.vue";
 import { useContextMenu } from "../../hooks/useContentMenu.js";
 import { useLayout } from "../../hooks/useLayout";
+// import { useShowStore } from "@/store/modules/showStore/index.js";
+
 useLayout();
 const { handleContextMenu } = useContextMenu();
+// const showStore = useShowStore();
+
+// watch(
+//   () => showStore.configurationShow,
+//   () => {
+//     console.log("侧边栏变化啦");
+//     useLayout();
+//   },
+//   {
+//     deep: true,
+//     immediate: true,
+//   }
+// );
 </script>
 
 <template>

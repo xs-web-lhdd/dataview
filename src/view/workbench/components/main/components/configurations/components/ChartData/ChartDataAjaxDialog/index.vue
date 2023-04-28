@@ -1,33 +1,27 @@
 <!-- 请求 model 配置 -->
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, toRefs } from "vue";
+import { useSync } from "../../../../../hooks/useSync.js";
+import { useTargetData } from "../../../hooks/useTargetData.js";
+
 const props = defineProps({
-  showModel: {
-    type: Boolean,
-    require: true,
-  },
-  request: {
-    type: Object,
-    request: true,
-  },
+  modelShow: Boolean,
+  targetData: Object,
+  saveBtnText: String || null,
 });
-const showModel = ref(props.showModel);
+const emit = defineEmits(["update:modelShow", "sendHandle"]);
+
+const { dataSyncUpdate } = useSync();
+const { chartEditStore } = useTargetData();
+const { requestOriginUrl, requestInterval, requestIntervalUnit } = toRefs(
+  chartEditStore.getRequestGlobalConfig
+);
+const { requestHttpType, requestUrl } = toRefs(props.targetData.request);
+const modelShowRef = ref(false);
 const tableList = ref([
   {
     id: 1,
-    key: "key",
-    value: "value",
-    error: false,
-  },
-  {
-    id: 2,
-    key: "k",
-    value: "v",
-    error: true,
-  },
-  {
-    id: 3,
     key: "",
     value: "",
     error: false,
@@ -37,9 +31,12 @@ const activeHeaderName = ref("Header");
 const requestModeValue = ref("0");
 
 watch(
-  () => props.showModel,
-  (newData) => {
-    showModel.value = newData;
+  () => props.modelShow,
+  (newValue) => {
+    modelShowRef.value = newValue;
+  },
+  {
+    immediate: true,
   }
 );
 
@@ -59,18 +56,30 @@ const removeColumn = (index) => {
   }
   blur();
 };
+// 关闭弹窗
+const closeHandle = () => {
+  emit("update:modelShow", false);
+};
+// 关闭弹窗且发送请求
+const closeAndSendHandle = () => {
+  emit("update:modelShow", false);
+  emit("sendHandle");
+  dataSyncUpdate();
+};
 </script>
 
 <template>
-  <el-dialog v-model="showModel" title="请求配置" width="50%">
+  <el-dialog v-model="modelShowRef" title="请求配置" width="50%">
     <div>
       <el-form>
         <el-form-item label="请求根地址">
           <el-input
             placeholder="例：http:127.0.0.1/"
-            v-model="props.request.requestOriginUrl"
+            v-model="requestOriginUrl"
           ></el-input>
         </el-form-item>
+        <!-- TODO: 请求间隔 -->
+        <!-- 请求头配置 -->
         <el-form-item label="请求头参数配置">
           <el-tabs v-model="activeHeaderName">
             <el-tab-pane label="Header" name="Header">
@@ -132,7 +141,7 @@ const removeColumn = (index) => {
         <el-form-item label="请求相对地址">
           <el-input
             placeholder="请输入地址（除去请求根地址）"
-            v-model="props.request.requestApi"
+            v-model="requestUrl"
           ></el-input>
         </el-form-item>
         <el-form-item label="请求头参数配置">
@@ -187,8 +196,10 @@ const removeColumn = (index) => {
     <!-- 底部按钮 -->
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="showModel = false">取消</el-button>
-        <el-button type="primary" @click="showModel = false"> 确认 </el-button>
+        <el-button @click="closeHandle">取消配置</el-button>
+        <el-button type="primary" @click="closeAndSendHandle">
+          保存且发送请求
+        </el-button>
       </span>
     </template>
   </el-dialog>

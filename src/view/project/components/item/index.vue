@@ -9,13 +9,17 @@
             <el-icon style="color: #67c23a; position: absolute; top: 1px"
               ><SuccessFilled
             /></el-icon>
-            <span style="font-size: 16px; margin-left: 18px">已发布</span>
+            <span style="font-size: 14px; margin-left: 18px; color: #999"
+              >已发布</span
+            >
           </div>
           <div v-else style="position: relative">
             <el-icon style="color: #f56c6c; position: absolute; top: 1px"
               ><CircleCloseFilled
             /></el-icon>
-            <span style="font-size: 16px; margin-left: 18px">未发布</span>
+            <span style="font-size: 14px; margin-left: 18px; color: #999"
+              >未发布</span
+            >
           </div>
         </div>
         <div class="icon" @click="handOperate('delete', item.id)">
@@ -230,11 +234,13 @@ onMounted(() => {
   .item {
     width: 23%;
     height: 270px;
-    background-color: #e1e1e1;
+    // background-color: #e1e1e1;
     margin: 1%;
     padding: 10px 16px;
     box-sizing: border-box;
     border-radius: 10px;
+    border: 1px solid #f1f1f1;
+    transition: all 0.3s ease-in-out;
     .operate {
       margin-left: 20px;
       display: flex;
@@ -248,14 +254,16 @@ onMounted(() => {
       }
     }
     .img {
+      margin-top: 10px;
       height: 180px;
       img {
         width: 100%;
         height: 100%;
+        border-radius: 10px;
       }
     }
     .option {
-      margin-top: 20px;
+      margin-top: 10px;
       display: flex;
       justify-content: space-between;
       &-text {
@@ -264,6 +272,8 @@ onMounted(() => {
           line-height: 32px !important;
           height: 32px !important;
         }
+        font-size: 14px;
+        color: #999;
       }
       &-edit {
         flex: 1;
@@ -272,6 +282,9 @@ onMounted(() => {
         flex: 1;
       }
     }
+  }
+  .item:hover {
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   }
   .create {
     position: relative;

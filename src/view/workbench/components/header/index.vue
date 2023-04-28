@@ -1,13 +1,17 @@
 <script setup>
 import $Api from "@/api/index.js";
+import { useRouter } from "vue-router";
 import { useShowStore } from "@/store/modules/showStore/index.js";
 import { previewHandle } from "./hooks/usePreview";
 import { useSync } from "../main/hooks/useSync.js";
 import { useChartEditStore } from "@/store/modules/chartEditStore/index.js";
+// import { useChartLayoutStore } from "@/store/modules/chartLayoutStore/index.js";
 import { setTitle } from "@/utils";
 
 const store = useShowStore();
 const chartEditStore = useChartEditStore();
+const router = useRouter();
+// const chartLayoutStore = useChartLayoutStore();
 const { dataSyncUpdate } = useSync();
 const handleCharts = () => {
   store.changeCharts();
@@ -16,10 +20,27 @@ const handleLayers = () => {
   store.changeLayers();
 };
 const handleConfiguration = () => {
+  // 修改 store 里面状态
   store.changeConfiguration();
+  // chartLayoutStore.setItem("details", true);
 };
 const handlePreview = () => {
   previewHandle();
+};
+const handleHome = () => {
+  window["$message"].success("已保存！1s 后前往项目列表页~");
+  setTimeout(() => {
+    router.push("/project/items");
+  }, 500);
+};
+const handleSave = () => {
+  window["$message"].success("保存成功！");
+};
+const handleForward = () => {
+  window["$message"].info("此功能尚未开放！请以后再试~");
+};
+const handleBack = () => {
+  window["$message"].info("此功能尚未开放！请以后再试~");
 };
 const handleIcon = (icon) => {
   switch (icon) {
@@ -34,6 +55,18 @@ const handleIcon = (icon) => {
       break;
     case "preview":
       handlePreview();
+      break;
+    case "home":
+      handleHome();
+      break;
+    case "save":
+      handleSave();
+      break;
+    case "forward":
+      handleForward();
+      break;
+    case "back":
+      handleBack();
       break;
   }
 };
@@ -78,12 +111,12 @@ const handleBlur = async () => {
     id: fetchRouteParamsLocation(),
     projectName: title.value,
   });
-  console.log("data", data);
-  // if (data) {
-  //   dataSyncUpdate();
-  // } else {
-  //   window["$message"].error("改项目名称失败！");
-  // }
+  if (data) {
+    window["$message"].success("更改项目名称成功！");
+    dataSyncUpdate();
+  } else {
+    window["$message"].error("改项目名称失败！");
+  }
 };
 const handleShowDialog = () => {
   dialogVisible.value = true;
@@ -107,7 +140,7 @@ const handleConfirmDialog = () => {
 <template>
   <div class="header">
     <div class="header-left">
-      <div class="icon">
+      <div class="icon icon-color" @click="handleIcon('home')">
         <el-icon><HomeFilled /></el-icon>
       </div>
       <div
@@ -130,33 +163,36 @@ const handleConfirmDialog = () => {
       >
         <el-icon><Operation /></el-icon>
       </div>
-      <div class="icon">
+      <div class="icon" @click="handleIcon('back')">
         <el-icon><Back /></el-icon>
       </div>
-      <div class="mr-30 icon">
+      <div class="mr-30 icon" @click="handleIcon('forward')">
         <el-icon><Right /></el-icon>
       </div>
-      <div class="icon">
+      <div class="icon icon-color" @click="handleIcon('save')">
         <el-icon><Briefcase /></el-icon>
       </div>
     </div>
     <div class="header-center">
       <div class="operate">
         <div class="operate-icon">
-          <el-icon><Tools /></el-icon>
+          <el-icon style="margin-top: 7px"><Tools /></el-icon>
         </div>
         <div class="operate-projectname" @click="handleFocus">
-          工作台 -
-          <el-button v-show="!focus"> {{ comTitle }} </el-button>
-          <el-input
-            v-show="focus"
-            v-model="title"
-            placeholder="请输入项目名称"
-            ref="inputInstRef"
-            size="small"
-            @blur="handleBlur"
-          >
-          </el-input>
+          <div style="padding: 8px 15px; font-size: 14px">工作台 -</div>
+          <div v-show="!focus">
+            <el-button text> {{ comTitle }} </el-button>
+          </div>
+          <div v-show="focus" style="margin-top: 5px">
+            <el-input
+              v-model="title"
+              placeholder="请输入项目名称"
+              ref="inputInstRef"
+              size="small"
+              @blur="handleBlur"
+            >
+            </el-input>
+          </div>
         </div>
       </div>
     </div>
@@ -262,10 +298,12 @@ const handleConfirmDialog = () => {
     .operate {
       display: flex;
       margin: 0 auto;
-      width: 300px;
-      padding: 20px 0;
+      // width: 300px;
+      // padding: 20px 0;
+      margin: 14px 0;
       &-projectname {
         margin-left: 10px;
+        display: flex;
       }
     }
   }

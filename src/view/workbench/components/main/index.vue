@@ -33,7 +33,9 @@ onMounted(() => {
       <!-- 图层部分 -->
     </div>
     <div class="center">
+      <!-- 画布背景的尺子 -->
       <EditRuler>
+        <!-- 真实画布 -->
         <EditCanvas />
       </EditRuler>
     </div>

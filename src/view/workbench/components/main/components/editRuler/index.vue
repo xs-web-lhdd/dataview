@@ -161,6 +161,7 @@ const dragCanvas = (e) => {
   width: 100%;
   height: calc(100vh - 62px);
   background-color: #fff;
+  // background-color: red;
 }
 
 .go-sketch-rule {

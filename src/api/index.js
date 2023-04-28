@@ -45,7 +45,7 @@ export default {
       data: params
     })
   },
-  uploadFile(params) {
+  uploadFileApi(params) {
     return request({
       url: '/project/upload',
       method: 'post',

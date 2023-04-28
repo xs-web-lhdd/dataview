@@ -340,7 +340,7 @@ export const useSync = () => {
         // 上传预览图
         let uploadParams = new FormData()
         uploadParams.append('object', base64toFile(canvasImage.toDataURL(), `${fetchRouteParamsLocation()}_index_preview.png`))
-        const uploadRes = await $Api.uploadFile(uploadParams)
+        const uploadRes = await $Api.uploadFileApi(uploadParams)
         // 保存预览图
         if(uploadRes && uploadRes.code === ResultEnum.SUCCESS) {
           await $Api.updateProjectApi({

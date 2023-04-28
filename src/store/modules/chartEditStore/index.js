@@ -1,3 +1,5 @@
+// import { watch } from 'vue'
+// import { useShowStore } from "@/store/modules/showStore/index.js";
 import { defineStore } from 'pinia'
 import { cloneDeep, debounce } from 'lodash'
 import { PublicGroupConfigClass } from '@/packages/public/publicConfig.js'
@@ -10,6 +12,7 @@ import { ChartEditStoreEnum } from '@/enums/chartEditEnum.js'
 
 
 const chartHistoryStore = useChartHistoryStore()
+// const showStore = useShowStore();
 
 export const useChartEditStore = defineStore('useChartEditStore', {
   state: () => {
@@ -593,7 +596,7 @@ export const useChartEditStore = defineStore('useChartEditStore', {
     fetchTargetIndex(id) {
       const targetId = id || (this.getTargetChart.selectId.length && this.getTargetChart.selectId[0]) || undefined
       if (!targetId) {
-        loadingFinish()
+        // loadingFinish()
         return -1
       }
       const targetIndex = this.componentList.findIndex(e => e.id === targetId)
@@ -710,12 +713,12 @@ export const useChartEditStore = defineStore('useChartEditStore', {
         const currentRate = parseFloat((width / height).toFixed(5))
         if (currentRate > baseProportion) {
           // 表示更宽
-          // console.log('表示更宽！！！');
+          console.log('表示更宽！！！');
           const scaleWidth = parseFloat(((height * baseProportion) / editCanvasWidth).toFixed(5))
           this.setScale(scaleWidth > 1 ? 1 : scaleWidth)
         } else {
           // 表示更高
-          // console.log('表示更高！！！');
+          console.log('表示更高！！！');
           const scaleHeight = parseFloat((width / baseProportion / editCanvasHeight).toFixed(5))
           this.setScale(scaleHeight > 1 ? 1 : scaleHeight)
         }
@@ -732,6 +735,14 @@ export const useChartEditStore = defineStore('useChartEditStore', {
       resize()
       // 开始监听
       window.addEventListener('resize', resize)
+      // // 监听 收起/展开 按钮:
+      // watch(
+      //   () => showStore.configurationShow,
+      //   () => {
+      //     this.computedScale()
+      //   },
+      //   {}
+      // )
       // 销毁函数
       const remove = () => {
         window.removeEventListener('resize', resize)

@@ -1,16 +1,18 @@
 <!-- 画布配置 -->
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, nextTick } from "vue";
 import { useChartEditStore } from "@/store/modules/chartEditStore/index.js";
 import { backgroundImageSize } from "@/settings/designSetting";
 import { FileTypeEnum } from "@/enums/fileTypeEnum.js";
+import { useSystemStore } from "@/store/modules/systemStore/index.js";
+import $Api from "@/api/index.js";
+import { fetchRouteParamsLocation } from "@/utils";
 
 const chartEditStore = useChartEditStore();
+const systemStore = useSystemStore();
 const canvasConfig = chartEditStore.getEditCanvasConfig;
-const editCanvas = chartEditStore.getEditCanvas;
 
-const color = ref("409EFF");
 const value1 = ref(0);
 const value2 = ref(0);
 const value3 = ref(0);
@@ -20,7 +22,6 @@ const value6 = ref(true);
 const activeNames = ref(1);
 // 上传图片前置处理
 const beforeUploadHandle = async (file) => {
-  console.log(file);
   const type = file.type;
   const size = file.size;
 
@@ -40,6 +41,39 @@ const beforeUploadHandle = async (file) => {
   }
   return true;
 };
+// 自定义上传图片操作
+const customRequest = (options) => {
+  const { file } = options;
+  nextTick(async () => {
+    if (file) {
+      // 修改名称
+      const newNameFile = new File(
+        [file.name],
+        `${fetchRouteParamsLocation()}_index_background.png`,
+        { type: file.type }
+      );
+      let uploadParams = new FormData();
+      uploadParams.append("object", newNameFile);
+      const uploadData = await $Api.uploadFileApi(uploadParams);
+
+      // console.log("uploadRes", uploadData);
+
+      if (uploadData) {
+        chartEditStore.setEditCanvasConfig(
+          "backgroundImage",
+          // `${uploadData.fileName}?time=${new Date().getTime()}`
+          uploadData.fileName
+        );
+        chartEditStore.setEditCanvasConfig("selectColor", false);
+        window["$message"].success("添加图片成功！");
+        return;
+      }
+      window["$message"].error("添加图片失败，请稍后重试！");
+    } else {
+      window["$message"].error("添加图片失败，请稍后重试！");
+    }
+  });
+};
 </script>
 
 <template>
@@ -55,6 +89,7 @@ const beforeUploadHandle = async (file) => {
         drag
         action="https://run.mocky.io/"
         :before-upload="beforeUploadHandle"
+        :http-request="customRequest"
       >
         <el-icon class="el-icon--upload"><upload-filled /></el-icon>
         <div class="el-upload__text">

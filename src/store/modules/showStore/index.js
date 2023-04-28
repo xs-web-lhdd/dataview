@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 
+// 工作台展开栏设置
 export const useShowStore = defineStore('showList', {
   state: () => {
     return {

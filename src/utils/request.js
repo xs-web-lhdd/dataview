@@ -12,7 +12,7 @@ const TOKEN_INVALID = 'Token认证失败，请重新登录'
 const NETWORK_ERROR = '网络请求异常，请稍后重试'
 
 // 创建axios实例对象，添加全局配置
-const service = axios.create({
+export const service = axios.create({
     baseURL: config.baseApi,
     timeout: 8000
 })
@@ -49,8 +49,10 @@ service.interceptors.response.use((res) => {
         }, 1500)
         return Promise.reject(TOKEN_INVALID)
     } else {
-        ElMessage.error(msg || NETWORK_ERROR)
-        return Promise.reject(msg || NETWORK_ERROR)
+        // ElMessage.error(msg || NETWORK_ERROR)
+        // return Promise.reject(msg || NETWORK_ERROR)
+
+        return res.data
     }
 })
 /**
