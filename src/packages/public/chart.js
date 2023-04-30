@@ -22,3 +22,25 @@ export const echartOptionProfixHandle = (option, includes) => {
   option['backgroundColor'] = 'rgba(0,0,0,0)'
   return mergeTheme(option, globalThemeJson, includes)
 }
+
+/**
+ * * 设置数据
+ * @param option
+ * @return option
+ */
+export const setData = (option, data) => {
+  option.dataset = data
+  return option
+}
+
+/**
+ * * 配置公共 setOption 方法
+ * @param instance
+ * @param data
+ */
+export const setOption = (instance, data) => {
+  if (!instance) return
+  const option = instance.getOption()
+  option.dataset = null
+  instance.setOption(data)
+}

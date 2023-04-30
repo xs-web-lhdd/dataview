@@ -24,7 +24,7 @@ export default {
       data: params
     })
   },
-  getProjectList(params) {
+  getProjectListApi(params) {
     return request({
       url: '/project/list',
       method: 'get',
@@ -56,6 +56,20 @@ export default {
     return request({
       url: '/project/edit',
       method: 'post',
+      data: params
+    })
+  },
+  createProjectApi(params) {
+    return request({
+      url: '/project/create',
+      method: 'post',
+      data: params
+    })
+  },
+  deleteProjectApi(params) {
+    return request({
+      url: '/project/delete',
+      method: 'get',
       data: params
     })
   }

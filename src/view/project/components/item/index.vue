@@ -68,6 +68,7 @@
       </div>
     </div>
 
+    <!-- 创建新项目 -->
     <div class="create item">
       <div class="create-icon" @click="handleCreate">
         <el-tooltip
@@ -88,6 +89,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import $Api from "@/api/index.js";
 import { useSystemStore } from "@/store/modules/systemStore/index.js";
+import { getUUID, fetchPathByName, routerTurnByPath } from "@/utils";
 import {
   ArrowDown,
   DocumentCopy,
@@ -96,10 +98,12 @@ import {
   CirclePlusFilled,
   Plus,
 } from "@element-plus/icons-vue";
+import { ElMessageBox } from "element-plus";
 
 const systemStore = useSystemStore();
 const router = useRouter();
 const projectList = ref([]);
+const createUserId = systemStore.userInfo.userId;
 
 const selectList = [
   {
@@ -135,13 +139,52 @@ const selectList = [
 ];
 
 const handleEdit = (projectId) => {
-  router.push(`/workbench/${projectId}`);
+  const path = `http://localhost:4000/#/workbench/${projectId}`;
+  window.open(path, "_blank");
 };
-const handleCreate = () => {
-  router.push("/workbench");
+const handleCreate = async () => {
+  try {
+    const res = await $Api.createProjectApi({
+      // 项目名称：
+      projectName: getUUID(),
+      // remarks
+      remarks: null,
+      // 图片地址
+      indexImage: null,
+      // 用户id
+      createUserId,
+    });
+    if (res) {
+      window["$message"].success("创建项目成功！");
+      const { id } = res;
+      const path = `http://localhost:4000/#/workbench/${id}`;
+      window.open(path, "_blank");
+    }
+  } catch (error) {
+    console.log("创建项目失败的错误 --->>>", error);
+  }
+};
+// 删除项目API操作：
+const deleteProjectItem = async (projectId) => {
+  const res = await $Api.deleteProjectApi({
+    ids: projectId,
+  });
+  if (res) {
+    window["$message"].success("删除项目成功！");
+    getProjectList();
+  }
 };
 const handleDelete = (projectId) => {
-  console.log("删除操作");
+  ElMessageBox.confirm("你确定删除此项目吗？")
+    .then(() => {
+      deleteProjectItem(projectId);
+    })
+    .catch((error) => {
+      // catch error
+      if (error === "cancel") return;
+      console.log("删除项目的错误 --->>> ", error);
+      window["$message"].error("删除失败！请稍后重试！");
+    });
 };
 const handleView = (projectId) => {
   console.log("放大操作");
@@ -205,7 +248,7 @@ const handleSelect = (directive, projectId) => {
 // 初始化获取项目列表
 const getProjectList = async () => {
   try {
-    const data = await $Api.getProjectList({
+    const data = await $Api.getProjectListApi({
       page: 1,
       limit: 10,
       createUserId: systemStore.userInfo.userId,
@@ -213,7 +256,6 @@ const getProjectList = async () => {
     if (data) {
       projectList.value = data;
     }
-    console.log("项目", data);
   } catch (error) {
     console.log("获取项目列表出错：", error);
   }

@@ -3,9 +3,9 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../view/home/index.vue'
 
 // 引入路径
-const importPath = {
-  'PreviewEnum.CHART_PREVIEW_NAME': () => import('@/views/preview/wrapper.vue')
-}
+// const importPath = {
+//   'PreviewEnum.CHART_PREVIEW_NAME': () => import('@/views/preview/wrapper.vue')
+// }
 
 const routes = [
     {
@@ -109,7 +109,6 @@ const routes = [
     {
       path: '/chart/preview/:id(.*)*',
       name: 'ChartPreview',
-      // component: importPath['PreviewEnum.CHART_PREVIEW_NAME'],
       component: () => import('@/view/preview/wrapper.vue'),
       meta: {
         title: '预览',

@@ -1,3 +1,5 @@
+import { chartColorsSearch } from '@/settings/chartThemes/index'
+
 /**
  * * 合并基础颜色和自定义颜色
  * @param chartDefaultColors
@@ -55,4 +57,23 @@ export const getTransformStyle = (styles) => {
       skewX || 0
     }deg) skewY(${skewY || 0}deg)`
   }
+}
+
+/**
+ * * 合并基础渐变颜色和自定义渐变颜色
+ * @param customColor
+ */
+export const colorGradientCustomMerge = (customColor) => {
+  const formateGradientCustomColor = {}
+  customColor?.forEach(item => {
+    formateGradientCustomColor[item.id] = [
+      item.color[0],
+      item.color[1],
+      fade(item.color[0], 0.3),
+      fade(item.color[0], 0.5),
+      fade(item.color[1], 0.5)
+    ]
+  })
+
+  return { ...formateGradientCustomColor, ...chartColorsSearch }
 }

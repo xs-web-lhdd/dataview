@@ -1,0 +1,181 @@
+// 颜色
+:root {
+  /**
+   * 基础色盘
+   */
+
+  // 克莱因蓝
+  --d-color-kleinblue1: #000412;
+  --d-color-kleinblue2: #000827;
+  --d-color-kleinblue3: #0c2360;
+  --d-color-kleinblue4: #00288d;
+  --d-color-kleinblue5: #002fa7;
+  --d-color-kleinblue6: #0d3cb4;
+  --d-color-kleinblue7: #2555cd;
+  --d-color-kleinblue8: #406fe7;
+  --d-color-kleinblue9: #5988ff;
+  --d-color-kleinblue10: #b2c0e4;
+
+  // 中性色
+  --d-color-neutral1: #121212;
+  --d-color-neutral2: #151515;
+  --d-color-neutral3: #2d2d2d;
+  --d-color-neutral4: #3f3f3f;
+  --d-color-neutral5: #555555;
+  --d-color-neutral6: #707070;
+  --d-color-neutral7: #848484;
+  --d-color-neutral8: #999999;
+  --d-color-neutral9: #b2b2b2;
+  --d-color-neutral10: #cccccc;
+  --d-color-neutral11: #e5e5e5;
+
+  // 红色
+  --d-color-red1: #850d09;
+  --d-color-red2: #b4110c;
+  --d-color-red3: #e4160f;
+  --d-color-red4: #f13b35;
+  --d-color-red5: #f3524d;
+  --d-color-red6: #ff5f5a;
+  --d-color-red7: #ff7873;
+  --d-color-red8: #ff928d;
+  --d-color-red9: #ffaba6;
+  --d-color-red10: #ffd2af;
+
+  // 黄色
+  --d-color-yellow1: #754c01;
+  --d-color-yellow2: #a86d01;
+  --d-color-yellow3: #dabe01;
+  --d-color-yellow4: #feaa11;
+  --d-color-yellow5: #feb32a;
+  --d-color-yellow6: #ffc037;
+  --d-color-yellow7: #ffd950;
+  --d-color-yellow8: #fff36a;
+  --d-color-yellow9: #ffff83;
+  --d-color-yellow10: #ffe1aa;
+
+  // 绿色
+  --d-color-green1: #1f370f;
+  --d-color-green2: #355f1a;
+  --d-color-green3: #4b8725;
+  --d-color-green4: #62af30;
+  --d-color-green5: #6dc335;
+  --d-color-green6: #7ad042;
+  --d-color-green7: #93e95b;
+  --d-color-green8: #adff75;
+  --d-color-green9: #c6ff8e;
+  --d-color-green10: #c5e7ae;
+
+  // 橙色
+  --d-color-orange1: #9b370e;
+  --d-color-orange2: #b54f00;
+  --d-color-orange3: #e86600;
+  --d-color-orange4: #ff801c;
+  --d-color-orange5: #ff8e36;
+  --d-color-orange6: #ff9b43;
+  --d-color-orange7: #ffb45c;
+  --d-color-orange8: #ffce76;
+  --d-color-orange9: #ffcf8f;
+  --d-color-orange10: #ffd2af;
+
+  // 灰蓝色
+  --d-color-greyblue1: #e5e8f0;
+  --d-color-greyblue2: #f7f8fa;
+  --d-color-greyblue3: #f5f6f8;
+
+  // 灰黑色
+  --d-color-greyblack1: #1e1e1e;
+  --d-color-greyblack2: #242424;
+  --d-color-greyblack3: #2e2e2e;
+  --d-color-greyblack4: #383838;
+
+  // 白色
+  --d-color-white: #ffffff;
+
+  // 黑色
+  --d-color-black: #000000;
+
+  // 透明
+  --d-color-transparent: transparent;
+
+  /**
+   * 状态颜色 && 功能颜色
+   */
+
+  // 成功色
+  --d-color-success1: var(--d-color-green5); // normal
+  --d-color-success2: var(--d-color-green7); // hover
+  --d-color-success3: var(--d-color-green10); // disabled
+
+  // 告警色
+  --d-color-warning1: var(--d-color-orange5); // normal
+  --d-color-warning2: var(--d-color-orange7); // hover
+  --d-color-warning3: var(--d-color-orange10); // disabled
+
+  // 错误色
+  --d-color-error1: var(--d-color-red5); // normal
+  --d-color-error2: var(--d-color-red7); // hover
+  --d-color-error3: var(--d-color-red10); // disabled
+
+  // 品牌色
+  --d-color-brand1: var(--d-color-kleinblue5); // 常规、文字
+  --d-color-brand2: var(--d-color-kleinblue8); // 悬浮
+  --d-color-brand3: var(--d-color-kleinblue4); // 确认
+  --d-color-brand4: var(--d-color-kleinblue6); // 特殊场景
+  --d-color-brand5: var(--d-color-kleinblue10); // 一般禁用
+  --d-color-brand6: var(
+    --d-color-kleinblue10
+  ); // 文字禁用，暂和一般禁用保持一致
+
+  // 文字颜色
+  --d-color-text1: var(--d-color-black); // 强调/正文标题 黑色
+  --d-color-text2: var(--d-color-white); // 强调/正文标题 白色
+  --d-color-text3: var(--d-color-neutral4); // 次强调/正文标题
+  --d-color-text4: var(--d-color-neutral6); // 次要信息/正文
+  --d-color-text5: var(--d-color-neutral11); // 置灰信息
+  --d-color-text-secondary: var(--d-color-neutral6); // 次级文字颜色
+
+  // 背景色
+  --d-color-bg1: var(--d-color-greyblue3); // 整体背景色
+  --d-color-bg2: var(--d-color-white); // 一级容器背景色
+  --d-color-bg3: var(--d-color-greyblue2); // 二级容器背景色
+  --d-color-bg4: var(--d-color-greyblue1); // 三级容器背景色
+  --d-color-bg5: var(--d-color-white); // 弹出框、tooltip背景色
+  --d-color-bg6: rgba(0, 0, 0, 0.5); // 蒙层
+  --d-color-bg-secondary: var(--d-color-neutral11); // 次级颜色背景颜色
+
+  // 链接色
+  --d-color-link1: var(--d-color-kleinblue5); // 常规
+  --d-color-link2: var(--d-color-kleinblue8); // 悬浮
+  --d-color-link3: var(--d-color-kleinblue4); // 点击
+  --d-color-link4: var(--d-color-kleinblue6); // 特殊场景
+  --d-color-link5: var(--d-color-kleinblue10); // 一般禁用
+  --d-color-link6: var(--d-color-kleinblue10); // 文字禁用，暂和一般禁用保持一致
+
+  // 边框颜色
+  --d-color-border1: var(--d-color-neutral6);
+  --d-color-border2: var(--d-color-neutral11);
+  --d-color-border3: var(--d-color-kleinblue5);
+
+  // 分割线颜色
+  --d-color-division1: var(--d-color-neutral11);
+
+  // 填充色，用于阴影容器背景
+  --d-color-fill1: var(
+    --d-color-white
+  ); // SL1 一级投影容器背景，应用于默认状态的卡片、楼层、导航栏、组件里局部投影背景等
+  --d-color-fill2: var(
+    --d-color-white
+  ); // SL2 二级投影容器背景，应用于卡片、组件里局部投影等
+  --d-color-fill2_hover: var(
+    --d-color-white
+  ); // SL2-hover 升起投影容器背景，应用于悬停状态的卡片等，是SL2的激活态
+  --d-color-fill3: var(
+    --d-color-white
+  ); // SL3 三级投影容器背景，应用于一级投影上的卡片、组件等
+  --d-color-fill4: var(
+    --d-color-white
+  ); // SL4 覆盖阴影容器背景，应用于信息提示【tips、活动进入按钮等】等投影容器
+  --d-color-fill5: var(
+    --d-color-white
+  ); // SL5 弹出阴影容器背景，应用于模态弹窗投影
+}

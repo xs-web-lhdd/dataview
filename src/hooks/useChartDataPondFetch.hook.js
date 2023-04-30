@@ -1,5 +1,5 @@
 import { toRaw } from 'vue'
-// import { customizeHttp } from '@/api/http'
+import { customizeHttp } from '@/api/http'
 import { useChartEditStore } from '@/store/modules/chartEditStore/index.js'
 import { newFunctionHandle, intervalUnitHandle } from '@/utils'
 
@@ -19,23 +19,23 @@ const newPondItemInterval = (
 
   // 请求
   const fetchFn = async () => {
-    // try {
-    //   const res = await customizeHttp(toRaw(requestDataPondItem.dataPondRequestConfig), toRaw(requestGlobalConfig))
+    try {
+      const res = await customizeHttp(toRaw(requestDataPondItem.dataPondRequestConfig), toRaw(requestGlobalConfig))
 
-    //   if (res) {
-    //     try {
-    //       // 遍历更新回调函数
-    //       dataPondMapItem.forEach(item => {
-    //         item.updateCallback(newFunctionHandle(res?.data, res, item.filter))
-    //       })
-    //     } catch (error) {
-    //       console.error(error)
-    //       return error
-    //     }
-    //   }
-    // } catch (error) {
-    //   return error
-    // }
+      if (res) {
+        try {
+          // 遍历更新回调函数
+          dataPondMapItem.forEach(item => {
+            item.updateCallback(newFunctionHandle(res?.data, res, item.filter))
+          })
+        } catch (error) {
+          console.error(error)
+          return error
+        }
+      }
+    } catch (error) {
+      return error
+    }
   }
 
   // 立即调用
