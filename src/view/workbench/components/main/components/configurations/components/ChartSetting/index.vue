@@ -21,6 +21,16 @@ const { targetData, chartEditStore } = useTargetData();
       :canvasConfig="chartEditStore.getEditCanvasConfig"
     />
     <!-- 图表自定义配置项 -->
+    <div
+      style="
+        text-align: center;
+        margin-bottom: 15px;
+        line-height: 30px;
+        height: 30px;
+      "
+    >
+      图表自定义配置
+    </div>
     <component
       :is="targetData.chartConfig.conKey"
       :optionData="targetData.option"

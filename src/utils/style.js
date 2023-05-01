@@ -1,4 +1,5 @@
 import { chartColorsSearch } from '@/settings/chartThemes/index'
+import Color from 'color'
 
 /**
  * * 合并基础颜色和自定义颜色
@@ -76,4 +77,15 @@ export const colorGradientCustomMerge = (customColor) => {
   })
 
   return { ...formateGradientCustomColor, ...chartColorsSearch }
+}
+
+
+/**
+ * * hsla 转换
+ * @param color 颜色
+ * @param alpha 默认1
+ * @returns
+ */
+export function alpha(color, alpha) {
+  return Color(color).alpha(alpha).toString()
 }

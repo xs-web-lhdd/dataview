@@ -171,7 +171,7 @@ export const useSync = () => {
     projectData.editCanvasConfig = canvasVersionUpdatePolyfill(projectData.editCanvasConfig)
 
     // 列表组件注册
-    projectData.componentList.forEach(async (e) => {
+    projectData?.componentList?.forEach(async (e) => {
       const intComponent = (target) => {
         if (!window['$vue'].component(target.chartConfig.chartKey)) {
           window['$vue'].component(target.chartConfig.chartKey, fetchChartComponent(target.chartConfig))
@@ -288,7 +288,9 @@ export const useSync = () => {
     try {
       const data = await $Api.fetchProjectApi({ projectId: fetchRouteParamsLocation() })
 
-      if(!data) chartEditStore.setEditCanvas(EditCanvasTypeEnum.SAVE_STATUS, SyncEnum.FAILURE)
+      if(!data) {
+        chartEditStore.setEditCanvas(EditCanvasTypeEnum.SAVE_STATUS, SyncEnum.FAILURE)
+      }
       // if (data) {
         if (data) {
           updateStoreInfo(data)

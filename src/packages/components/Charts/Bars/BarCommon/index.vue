@@ -1,16 +1,7 @@
 <template>
-  <!-- <v-chart
-    ref="vChartRef"
-    :theme="themeColor"
-    :option="option"
-    :manual-update="isPreview()"
-    :update-options="{
-      replaceMerge: replaceMergeArr,
-    }"
-    autoresize
-  ></v-chart> -->
   <v-chart
     ref="vChartRef"
+    :theme="themeColor"
     :option="option"
     :manual-update="isPreview()"
     :update-options="{
@@ -54,14 +45,14 @@ import isObject from "lodash/isObject";
  * 然后 componentList 内容是在拖拽或者双击时添加入的，可以查看 @/views/chart/ContentCharts/component/ChartsItemBox/index.vue 里面即可明白
  */
 const props = defineProps({
-  // themeSetting: {
-  //   type: Object,
-  //   required: true,
-  // },
-  // themeColor: {
-  //   type: Object,
-  //   required: true,
-  // },
+  themeSetting: {
+    type: Object,
+    // required: true,
+  },
+  themeColor: {
+    type: Object,
+    // required: true,
+  },
   chartConfig: {
     type: Object,
     required: true,
@@ -103,7 +94,6 @@ watch(
         // window['$message'].error('得到的新数据不是对象或者对象里面缺失 dimensions 属性！')
         return;
       }
-      // console.log('后续没有执行。。。')
       if (Array.isArray(newData?.dimensions)) {
         const seriesArr = [];
         for (let i = 0; i < newData.dimensions.length - 1; i++) {
@@ -126,5 +116,5 @@ watch(
 
 // 数据更新处理，使用 dataset 的 Eharts 图表不需要额外处理，hooks 会借助 vChartRef 自动更新
 // 若每次更新需要修改其它属性，可添加回调函数处理，参考：src\packages\components\Charts\Pies\PieCircle
-// const { vChartRef } = useChartDataFetch(props.chartConfig, useChartEditStore);
+const { vChartRef } = useChartDataFetch(props.chartConfig, useChartEditStore);
 </script>

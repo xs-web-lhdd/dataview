@@ -22,19 +22,29 @@ const handleLayers = () => {
 const handleConfiguration = () => {
   // 修改 store 里面状态
   store.changeConfiguration();
-  // chartLayoutStore.setItem("details", true);
 };
 const handlePreview = () => {
   previewHandle();
 };
 const handleHome = () => {
-  window["$message"].success("已保存！1s 后前往项目列表页~");
-  setTimeout(() => {
-    router.push("/project/items");
-  }, 500);
+  ElMessageBox.alert("默认保存项目后回主页", "回主页？", {
+    confirmButtonText: "确定",
+    callback: () => {
+      handleSave();
+      window["$message"].success("已保存！1s 后前往项目列表页~");
+      setTimeout(() => {
+        router.push("/project/items");
+      }, 500);
+    },
+  });
 };
 const handleSave = () => {
-  window["$message"].success("保存成功！");
+  try {
+    dataSyncUpdate();
+    window["$message"].success("保存成功！");
+  } catch (error) {
+    window["$message"].error("保存失败！");
+  }
 };
 const handleForward = () => {
   window["$message"].info("此功能尚未开放！请以后再试~");
