@@ -343,11 +343,13 @@ export const useSync = () => {
         let uploadParams = new FormData()
         uploadParams.append('object', base64toFile(canvasImage.toDataURL(), `${fetchRouteParamsLocation()}_index_preview.png`))
         const uploadRes = await $Api.uploadFileApi(uploadParams)
+
         // 保存预览图
-        if(uploadRes && uploadRes.code === ResultEnum.SUCCESS) {
+        if(uploadRes) {
           await $Api.updateProjectApi({
             id: fetchRouteParamsLocation(),
-            indexImage: `${systemStore.getFetchInfo.OSSUrl}${uploadRes.data.fileName}`
+            // indexImage: `${systemStore.getFetchInfo.OSSUrl}${uploadRes.fileName}`
+            indexImage: `/api/goview/project/getImages/${uploadRes.fileName}`
           })
         }
       }

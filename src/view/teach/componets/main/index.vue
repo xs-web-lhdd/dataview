@@ -1,6 +1,54 @@
 <script setup>
 import { ref } from "vue";
 const activeName = ref("first");
+
+const colors = [
+  { start: "#9ac4fb", end: "#5c91ed" },
+  { start: "#67DEED", end: "#2FBAD6" },
+  { start: "#AAB4D3", end: "#848FB1" },
+  { start: "#F8DE80", end: "#F79E1C" },
+  { start: "#FCA0D5", end: "#9462E4" },
+  { start: "#6266DB", end: "#4D50BA" },
+  { start: "#9497EE", end: "#5E61DD" },
+];
+
+const listHot = [
+  {
+    title: "制作柱状图",
+    desc: "如何制作柱状图并改配置（横向+胶囊）",
+    duration: "1:29",
+  },
+  {
+    title: "制作折线图",
+    desc: "如何制作折线图并改配置（双折渐变+单折渐变）",
+    duration: "1:29",
+  },
+  {
+    title: "制作地图",
+    desc: "如何制作地图并改配置（高德地图+省份地图）",
+    duration: "1:29",
+  },
+  {
+    title: "制作其他图",
+    desc: "如何制作其他图（漏斗图+雷达图等）",
+    duration: "1:29",
+  },
+  {
+    title: "制作饼图",
+    desc: "如何制作饼图并改配置",
+    duration: "1:29",
+  },
+  {
+    title: "制作散点图",
+    desc: "如何制作散点图并改配置（散点图+对数散点图）",
+    duration: "1:29",
+  },
+  {
+    title: "添加边框",
+    desc: "如何添加柱边框并改配置",
+    duration: "1:29",
+  },
+];
 </script>
 
 <template>
@@ -10,8 +58,36 @@ const activeName = ref("first");
         <el-tabs v-model="activeName" class="demo-tabs" tab-position="top">
           <el-tab-pane label="热门视频" name="first">
             <ul class="video-list">
-              <li v-for="item in 10">
-                <div class="video-mask">
+              <li v-for="(item, index) in listHot" :key="index">
+                <div
+                  class="video-mask"
+                  :style="{
+                    'background-image': `linear-gradient(${
+                      colors[index % 6].start
+                    } 0, ${colors[index % 6].end} 100%)`,
+                  }"
+                >
+                  <p class="video-title">{{ item.title }}</p>
+                  <p class="video-desc">{{ item.desc }}</p>
+                  <div class="video-duration">{{ item.duration }}</div>
+                </div>
+                <div class="video-mask-hover">
+                  <el-icon class="icon"><VideoPlay /></el-icon>
+                </div>
+              </li>
+            </ul>
+          </el-tab-pane>
+          <el-tab-pane label="数据接入" name="second">
+            <ul class="video-list">
+              <li v-for="(item, index) in 7" :key="index">
+                <div
+                  class="video-mask"
+                  :style="{
+                    'background-image': `linear-gradient(${
+                      colors[index % 6].start
+                    } 0, ${colors[index % 6].end} 100%)`,
+                  }"
+                >
                   <p class="video-title">制作双轴图</p>
                   <p class="video-desc">如何制作双轴图（折线图+柱状图）</p>
                   <div class="video-duration">1:18</div>
@@ -22,10 +98,69 @@ const activeName = ref("first");
               </li>
             </ul>
           </el-tab-pane>
-          <el-tab-pane label="数据接入" name="second">数据接入</el-tab-pane>
-          <el-tab-pane label="数据处理" name="third">数据处理</el-tab-pane>
-          <el-tab-pane label="可视化展示" name="fourth">可视化展示</el-tab-pane>
-          <el-tab-pane label="图表类型" name="fiveth">工作场景</el-tab-pane>
+          <el-tab-pane label="数据处理" name="third">
+            <ul class="video-list">
+              <li v-for="(item, index) in 6" :key="index">
+                <div
+                  class="video-mask"
+                  :style="{
+                    'background-image': `linear-gradient(${
+                      colors[index % 6].start
+                    } 0, ${colors[index % 6].end} 100%)`,
+                  }"
+                >
+                  <p class="video-title">制作双轴图</p>
+                  <p class="video-desc">如何制作双轴图（折线图+柱状图）</p>
+                  <div class="video-duration">1:18</div>
+                </div>
+                <div class="video-mask-hover">
+                  <el-icon class="icon"><VideoPlay /></el-icon>
+                </div>
+              </li>
+            </ul>
+          </el-tab-pane>
+          <el-tab-pane label="可视化展示" name="fourth">
+            <ul class="video-list">
+              <li v-for="(item, index) in 4" :key="index">
+                <div
+                  class="video-mask"
+                  :style="{
+                    'background-image': `linear-gradient(${
+                      colors[index % 6].start
+                    } 0, ${colors[index % 6].end} 100%)`,
+                  }"
+                >
+                  <p class="video-title">制作双轴图</p>
+                  <p class="video-desc">如何制作双轴图（折线图+柱状图）</p>
+                  <div class="video-duration">1:18</div>
+                </div>
+                <div class="video-mask-hover">
+                  <el-icon class="icon"><VideoPlay /></el-icon>
+                </div>
+              </li>
+            </ul>
+          </el-tab-pane>
+          <el-tab-pane label="图表类型" name="fiveth">
+            <ul class="video-list">
+              <li v-for="(item, index) in 9" :key="index">
+                <div
+                  class="video-mask"
+                  :style="{
+                    'background-image': `linear-gradient(${
+                      colors[index % 6].start
+                    } 0, ${colors[index % 6].end} 100%)`,
+                  }"
+                >
+                  <p class="video-title">制作双轴图</p>
+                  <p class="video-desc">如何制作双轴图（折线图+柱状图）</p>
+                  <div class="video-duration">1:18</div>
+                </div>
+                <div class="video-mask-hover">
+                  <el-icon class="icon"><VideoPlay /></el-icon>
+                </div>
+              </li>
+            </ul>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </div>

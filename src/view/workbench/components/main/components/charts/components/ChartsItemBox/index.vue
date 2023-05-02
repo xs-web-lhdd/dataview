@@ -14,19 +14,6 @@ import {
 
 const chartEditStore = useChartEditStore();
 
-console.log(chartEditStore.componentList);
-
-// TODO: 测试 store 里面的 componentList 有没有更新
-watch(
-  () => chartEditStore.componentList.length,
-  () => {
-    console.log("componentList 列表是：", chartEditStore.componentList);
-  },
-  {
-    immediate: true,
-  }
-);
-
 const props = defineProps({
   listOptions: {
     type: Object,

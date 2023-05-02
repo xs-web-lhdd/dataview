@@ -1,5 +1,6 @@
 <script setup>
 import Banner from "./components/banner/index.vue";
+import Header from "./components/header/index.vue";
 import BannerOne from "./components/bannerOne/index.vue";
 import Propaganda from "./components/propaganda/index.vue";
 import Footer from "./components/footer/index.vue";
@@ -29,6 +30,7 @@ const cardList = [
 
 <template>
   <div class="home">
+    <Header />
     <!-- <Banner></Banner> -->
     <BannerOne />
     <!-- 宣传页 -->

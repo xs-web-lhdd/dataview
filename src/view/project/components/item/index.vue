@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="img">
-        <img :src="item.indexImage" alt="" />
+        <img :src="item.indexImage" alt="预览图" />
       </div>
       <div class="option">
         <el-text type="primary" class="option-text mx-1" size="large">{{

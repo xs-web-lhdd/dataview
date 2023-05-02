@@ -6,7 +6,6 @@ import bannerTwo from "@/assets/images/home/banner2.png";
 import bannerThree from "@/assets/images/home/banner3.png";
 import bannerFour from "@/assets/images/home/banner4.png";
 import bannerFive from "@/assets/images/home/banner5.png";
-import LogoImg from "@/assets/images/home/logo.png";
 import IconOne from "@/assets/images/home/icon-1.png";
 import IconTwo from "@/assets/images/home/icon-2.png";
 import IconThree from "@/assets/images/home/icon-3.png";
@@ -98,37 +97,22 @@ const handleUse = () => {
 
 <template>
   <div class="block text-center">
-    <!-- 导航栏 -->
-    <div class="header">
-      <div class="left">
-        <img :src="LogoImg" alt="" />
-      </div>
-      <div class="right">
-        <div class="items" v-if="!userInfo">
-          <div class="item" @click="router.push('/login')">登 陆</div>
-          <div class="item" @click="router.push('/register')">注 册</div>
-        </div>
-        <div class="items" v-else>
-          <div class="item" @click="router.push('/project/welcome')">
-            进入 DataView 个人中心
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- 轮播图 -->
     <el-carousel height="740px">
       <el-carousel-item v-for="item in banners" :key="item">
         <div class="items">
           <div :class="item.class" class="item">
-            <div class="banner-content">
-              <h3 class="banner-title">数据可视化展示神器</h3>
-              <p class="banner-desc">人人都是数据达人</p>
-              <div class="banner-btn" :class="item.class" @click="handleUse">
-                免费使用
+            <div class="item-content">
+              <div class="banner-content">
+                <h3 class="banner-title">数据可视化展示神器</h3>
+                <p class="banner-desc">人人都是数据达人</p>
+                <div class="banner-btn" :class="item.class" @click="handleUse">
+                  免费使用
+                </div>
               </div>
-            </div>
-            <div class="banner-img">
-              <img :src="item.img" alt="" />
+              <div class="banner-img">
+                <img :src="item.img" alt="" />
+              </div>
             </div>
           </div>
         </div>
@@ -157,40 +141,6 @@ const handleUse = () => {
 
 <style lang="scss" scoped>
 .block {
-  .header {
-    position: absolute;
-    top: 30px;
-    left: 0;
-    z-index: 1;
-    height: 50px;
-    display: flex;
-    width: 100%;
-    .left {
-      margin-left: 50px;
-      justify-content: flex-start;
-      flex: 1;
-    }
-    .right {
-      .items {
-        display: flex;
-        .item {
-          cursor: pointer;
-          // border-radius: 20px;
-          text-align: center;
-          min-width: 70px;
-          width: auto;
-          padding: 0 10px;
-          box-sizing: border-box;
-          height: 30px;
-          margin: 7px 10px 7px 0;
-          background-color: transparent;
-          color: #fff;
-          line-height: 30px;
-          border: 1px solid #fff;
-        }
-      }
-    }
-  }
   .feature-wrap {
     width: 100%;
     height: 460px;
@@ -260,6 +210,13 @@ const handleUse = () => {
   .item {
     position: relative;
     height: 100%;
+    margin: 0 auto;
+    &-content {
+      position: relative;
+      width: 1280px;
+      height: 100%;
+      margin: 0 auto;
+    }
     .banner-content {
       position: absolute;
       bottom: 320px;

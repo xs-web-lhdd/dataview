@@ -48,7 +48,7 @@ const customRequest = (options) => {
     if (file) {
       // 修改名称
       const newNameFile = new File(
-        [file.name],
+        [file],
         `${fetchRouteParamsLocation()}_index_background.png`,
         { type: file.type }
       );
@@ -56,13 +56,12 @@ const customRequest = (options) => {
       uploadParams.append("object", newNameFile);
       const uploadData = await $Api.uploadFileApi(uploadParams);
 
-      // console.log("uploadRes", uploadData);
-
       if (uploadData) {
+        // 设置背景图片和对应路径
         chartEditStore.setEditCanvasConfig(
           "backgroundImage",
           // `${uploadData.fileName}?time=${new Date().getTime()}`
-          uploadData.fileName
+          `/api/goview/project/getImages/${uploadData.fileName}`
         );
         chartEditStore.setEditCanvasConfig("selectColor", false);
         window["$message"].success("添加图片成功！");
