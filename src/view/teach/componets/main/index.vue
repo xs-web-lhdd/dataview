@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 const activeName = ref("first");
+const showVideo = ref(false);
 
 const colors = [
   { start: "#9ac4fb", end: "#5c91ed" },
@@ -49,6 +50,10 @@ const listHot = [
     duration: "1:29",
   },
 ];
+
+const handlePlayer = () => {
+  showVideo.value = !showVideo.value;
+};
 </script>
 
 <template>
@@ -71,7 +76,7 @@ const listHot = [
                   <p class="video-desc">{{ item.desc }}</p>
                   <div class="video-duration">{{ item.duration }}</div>
                 </div>
-                <div class="video-mask-hover">
+                <div class="video-mask-hover" @click="handlePlayer">
                   <el-icon class="icon"><VideoPlay /></el-icon>
                 </div>
               </li>
@@ -170,6 +175,16 @@ const listHot = [
         <a href="">联系我们</a>
       </p>
     </section>
+  </div>
+  <div class="main-video" v-if="showVideo">
+    <div class="main-video-icon" @click="handlePlayer">
+      <el-icon><Close /></el-icon>
+    </div>
+    <video
+      style="width: 100%"
+      controls
+      src="https://video.bdp.cn/pmresources/assets/dashEdit/biaxialDiagram_170313.mp4"
+    ></video>
   </div>
 </template>
 
@@ -295,6 +310,29 @@ const listHot = [
       color: #5182e4;
       cursor: pointer;
       text-decoration: none;
+    }
+  }
+  &-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 99;
+    transform: translate(-50%);
+    width: 600px;
+    // height: 400px;
+    background-color: #fff;
+    &-icon {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      z-index: 10;
+      cursor: pointer;
+      width: 16px;
+      height: 16px;
+      border: 1px solid #000;
+      border-radius: 50%;
+      background-color: #000;
+      color: #fff;
     }
   }
 }

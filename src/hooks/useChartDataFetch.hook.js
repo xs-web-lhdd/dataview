@@ -1,7 +1,17 @@
-import { ref, toRaw } from "vue"
+import { ref, toRaw, toRefs } from "vue"
 // import { useChartEditStore } from '@/store/modules/useChartEditStore/index.js'
 import { useChartDataPondFetch } from '@/hooks'
 import { isPreview } from '@/utils'
+
+// 数据相关
+export const RequestDataTypeEnum = {
+  // 静态数据
+  STATIC: 0,
+  // 请求数据
+  AJAX: 1,
+  // 数据池
+  Pond: 2
+}
 
 /**
  * setdata 数据监听与更改

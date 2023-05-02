@@ -85,7 +85,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import $Api from "@/api/index.js";
 import { useSystemStore } from "@/store/modules/systemStore/index.js";
@@ -254,12 +254,28 @@ const getProjectList = async () => {
       createUserId: systemStore.userInfo.userId,
     });
     if (data) {
+      // 过滤出没发布的数据
+      if (router.currentRoute.value.path === "/project/unpublish") {
+        projectList.value = data.filter((item) => item.state === -1);
+        return;
+      }
+      if (router.currentRoute.value.path === "/project/published") {
+        projectList.value = data.filter((item) => item.state === 1);
+        return;
+      }
       projectList.value = data;
     }
   } catch (error) {
     console.log("获取项目列表出错：", error);
   }
 };
+
+watch(
+  () => router.currentRoute.value.path,
+  () => {
+    getProjectList();
+  }
+);
 
 onMounted(() => {
   getProjectList();

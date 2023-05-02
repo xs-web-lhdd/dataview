@@ -72,5 +72,12 @@ export default {
       method: 'get',
       data: params
     })
+  },
+  changeProjectReleaseApi(params) {
+    return request({
+      url: '/project/publish',
+      method: 'put',
+      data: params
+    })
   }
 }

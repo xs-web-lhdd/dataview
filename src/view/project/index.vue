@@ -20,7 +20,7 @@
         <TreeMenu :userMenu="userMenu" />
       </el-menu> -->
       <el-menu
-        default-active="/project/items"
+        default-active="/project/welcome"
         class="el-menu-vertical-demo"
         :collapse="isCollapse"
         text-color="#fff"

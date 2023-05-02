@@ -120,7 +120,9 @@ const handleUse = () => {
     </el-carousel>
     <div class="feature-wrap">
       <div class="feature">
-        <h3 class="feature-title">在 SH 个人版，你将收获极致的数据分析体验</h3>
+        <h3 class="feature-title">
+          在 DataView 个人版，你将收获极致的数据分析体验
+        </h3>
         <div class="feature-list">
           <div class="feature-item" v-for="item in featureList">
             <div class="symbol">

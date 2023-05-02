@@ -52,6 +52,27 @@ const handleForward = () => {
 const handleBack = () => {
   window["$message"].info("此功能尚未开放！请以后再试~");
 };
+
+const release = ref(false);
+
+watchEffect(() => {
+  release.value = chartEditStore.getProjectInfo.release || false;
+});
+const handlePublish = async () => {
+  try {
+    const res = await $Api.changeProjectReleaseApi({
+      id: fetchRouteParamsLocation(),
+      // 反过来
+      state: release.value ? -1 : 1,
+    });
+    if (!release.value) {
+      window["$message"].success(`发布成功!`);
+    } else {
+      window["$message"].success(`已取消发布`);
+    }
+    chartEditStore.setProjectInfo("release", !release.value);
+  } catch (error) {}
+};
 const handleIcon = (icon) => {
   switch (icon) {
     case "charts":
@@ -78,6 +99,8 @@ const handleIcon = (icon) => {
     case "back":
       handleBack();
       break;
+    case "publish":
+      handlePublish();
   }
 };
 
@@ -211,9 +234,11 @@ const handleConfirmDialog = () => {
         <el-icon class="preview-icon"><View /></el-icon>
         <span class="preview-text">预览</span>
       </div>
-      <div class="published btn">
+      <div class="published btn" @click="handleIcon('publish')">
         <el-icon class="published-icon"><SuccessFilled /></el-icon>
-        <span class="published-text">发布</span>
+        <span class="published-text">{{
+          release ? "取消发布" : "发布大屏"
+        }}</span>
       </div>
       <div class="language btn">
         <el-tooltip
@@ -345,7 +370,7 @@ const handleConfirmDialog = () => {
     .published {
       position: relative;
       border-radius: 5px;
-      width: 80px;
+      width: 110px;
       height: 38px;
       border: 1px solid #409eff;
       margin: 10px 20px 10px 0;
